@@ -1,8 +1,8 @@
 import "./threshold.css";
 import * as React from "react";
 import {observer} from "mobx-react";
-import {SidebarStore} from "../stores/sidebar";
-import ThresholdStore from "../stores/threshold";
+import {SidebarStore} from "../../stores/sidebar";
+import ThresholdStore from "../../stores/threshold";
 
 @observer
 export default class Threshold extends React.Component<{

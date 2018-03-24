@@ -18,12 +18,18 @@
     "background",
     "activeTab",
     "tabs",
-    "storage",
-    "unlimitedStorage",
     "http://*/*",
     "https://*/*"
   ],
 
+  "externally_connectable": {
+    "matches": [
+      "https://b6bce9e2.ngrok.io/*"
+    ]
+  },
+  "background": {
+    "scripts": ["js/background.js"]
+  },
   "content_scripts": [
     {
       "matches": [
