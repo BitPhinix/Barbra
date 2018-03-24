@@ -7,21 +7,21 @@
 
     overflow-x: hidden;
 
-    background-image:  url("chrome-extension://kfeckcoafmkbpklheclobbabphlcokmd/img/sidebar/background.png");
+    background-image:  url("chrome-extension://dggckmpdanfomjckhoihbendadcdajoc/img/sidebar/background.png");
 
     background-color: #5d5d5d;
     background-size: cover;
     box-shadow: -5px 0px 20px 1px rgba(0, 0, 0, 0.69);
 
     display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
 
     transition: transform 0.3s ease;
 
     font-family: "Europa" !important;
+
+    z-index: 100000;
 }
 
 #injected-app > #injected-sidebar.opened {
@@ -45,73 +45,45 @@
     background-color: white;
 }
 
-#injected-app > #injected-sidebar > #loginHeader {
-    margin-top: 100px;
-    height: 100px;
-    width: 100%;
-}
 
-#injected-app > #injected-sidebar > #loginHeader > #head {
-    font-weight: 600;
-    font-size: 40px;
-    color: white;
-    width: 100%;
-    text-align: center;
-    margin-left: 20px;
-}
+#injected-sidebar > #header-logo{
+    flex-grow: 1;
 
-#injected-app > #injected-sidebar > #loginHeader > #svgContainer {
     height: 50px;
-    width: 50px;
-    margin-left: 90px;
-    margin-top: 7px;
-}
-
-#injected-app > #injected-sidebar > #loginHeader > #svgContainer > svg {
-    height: 50px;
-}
-
-#injected-app > #injected-sidebar > #loginButtons {
-    height: auto;
-    width: 100%;
-    margin-top: 250px;
 
     display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    flex-direction: row;
     justify-content: center;
+    align-items: center;
+
+    padding-bottom: 30px;
 }
 
-#injected-app > #injected-sidebar > #loginButtons > button {
-    font-size: 25px;
+#injected-sidebar > #header-logo > #svg-con{
+    width: 40%;
+    height: 100%;
 
-    background-color: transparent;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
 
-    font-weight: 400;
-    font-size: 23px;
-
+#injected-sidebar > #header-logo > #span-con{
     width: 60%;
-    height: 48px;
+    height: 100%;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+
+    font-size: 25pt;
+    font-weight: 600;
     color: white;
 
-    text-align: center;
-    vertical-align: center;
+    padding-left: 6px;
 
-    border: white solid;
-    border-radius: 40px;
-
-    transition: 0.1s ease;
+    margin-left: 10px;
 }
 
-#injected-app > #injected-sidebar > #loginButtons > button:hover {
-    background-color: white;
-    color: #4A798D;
+#injected-sidebar > .signInButton{
+    background: red;
 }
-
-#btnf{
-    margin-top: 65px;
-}
-
-
-

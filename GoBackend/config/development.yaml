@@ -1,0 +1,18 @@
+server:
+  host: "http://localhost"
+  port: ":8080"
+  cookie_secret: "rUmxNwiR5tpQ3I92a72UoC9A0rJ0qs1QKgqmMEaO"
+
+db:
+  address: ":27017"
+  username: ""
+  password: ""
+  name: "barbra"
+
+oauth:
+  google:
+    client_id: "590936575046-qsm6u1ukjmip3l7bgi2hknijkkqu2rj8.apps.googleusercontent.com"
+    client_secret: "PG-4cXidPjOr9yDKIHshbaOV"
+  facebook:
+    client_id: "232026520698280"
+    client_secret: "cb34a278eafebd9285e92a2893a71c67"

@@ -1,6 +1,9 @@
-#injected-app * {
-    z-index: 100000;
-    position: fixed;
+#injected-app{
+    all: unset;
+}
+
+#injected-app *:not(svg , svg *){
+    all: initial;
 }
 
 /*
