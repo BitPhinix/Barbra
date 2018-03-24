@@ -1,0 +1,11 @@
+.information-card {
+    background: rgba(250, 250, 250, 0.88);
+    border-radius: 8px;
+    margin: 24px;
+    min-height: 200px;
+    min-width: 324px;
+}
+
+.information-card-content {
+    padding: 32px 16px 32px 24px;
+}
