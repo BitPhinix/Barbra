@@ -1,7 +1,18 @@
 .information-card-header {
     padding: 5px 10px 5px 10px;
+    background: rgba(255, 255, 255, 0.68);
+    border-radius: 8px 8px 0 0;
+    width: 100%;
 }
 
-.information-card-header-image-div {
-    max-width: 15px;
+.information-card-header-img{
+    float: right;
+}
+
+.information-card-header-img-img{
+    height: 25px !important;
+    float: right;
+    width: 20px !important;
+    padding-bottom: 5px;
+
 }

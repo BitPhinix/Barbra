@@ -3,6 +3,9 @@ import * as React from "react";
 import {observer} from "mobx-react";
 import {SidebarStore, SidebarStates} from "../stores/sidebar";
 import Header from "./header";
+import { InformationCard } from './informationCard/informationCard';
+import { ThemesList } from './themesList/themesList';
+import { DeletedInformationCardFeedbackBanner } from './deletedInformationCardFeedbackBanner/deletedInformationCardFeedbackBanner';
 
 @observer
 export default class Sidebar extends React.Component<{
@@ -38,8 +41,12 @@ export default class Sidebar extends React.Component<{
         return(
             <div ref={(node) => this.reference = node} id={"injected-sidebar"} className={this.props.store.visible ? "opened" : "closed"}>
                 <Header/>
-                {this.props.store.state}
+
+                <ThemesList items={['React', 'Tammo Studies', 'JavaScript']}/>
+                <DeletedInformationCardFeedbackBanner/>
             </div>
+
+
         );
     }
 }

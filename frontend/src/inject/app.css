@@ -63,3 +63,26 @@
 }
 
 .tk-europa { font-family: "europa",sans-serif; }
+
+#injected-app {
+    color: #444444;
+}
+
+#injected-app .text-12 {
+    font-size: 12px;
+    font-weight: 400;
+}
+
+#injected-app h5 {
+    font-family: "europa", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+}
+
+#injected-app p {
+    line-height: 23px;
+    font-size: 16px;
+    font-weight: 300;
+    color: #787878;
+}
