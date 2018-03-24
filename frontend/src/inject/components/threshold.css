@@ -1,0 +1,11 @@
+#injected-app > #injected-threshold {
+    background: rgba(255, 0, 0, 0.45);
+    width: 20px;
+    height: 100vh;
+    position: fixed;
+    right: 0;
+    top: 0;
+}
+
+
+
