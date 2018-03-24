@@ -5,7 +5,7 @@ import './buttonCard.css';
 
 export enum ButtonCardType {
     Delete = 'btn btn-card-right',
-    Bookmark = ' btn-card-left',
+    Bookmark = 'btn btn-card-left',
 }
 
 interface ButtonCardProps {

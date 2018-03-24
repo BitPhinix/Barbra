@@ -12,9 +12,9 @@ export function InformationCardHeader(props: InformationCardHeaderProps) {
         <div className='information-card-header'>
             <div className="text-12">
                 {props.topic}
-            </div>
-            <div className="information-card-header-image-div">
-                <img src={props.source}/>
+                <div className='information-card-header-img'>
+                    <img src={props.source} className="information-card-header-img-img"/>
+                </div>
             </div>
         </div>
     );
