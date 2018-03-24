@@ -11,7 +11,7 @@ export default class Sidebar extends React.Component<{
     public reference: HTMLElement;
 
     constructor(props){
-        super(props)
+        super(props);
         this.props = props;
 
         //If clicked outside the sidebar close it
