@@ -337,29 +337,29 @@ class Recommender(object):
         root = []
 
         c = 0
-        all_pages = []
+        keyp_url_content_mapping = []
         for phrase in phrase_list:
             if c > n:
                 break
-            root_url = 'https://medium.com/search?q='
-            first = '%20'.join(phrase[1].split(' '))
+            root_url = "https://medium.com/search?q="
+            first = "%20".join(phrase[1].split(" "))
             url = root_url + first
-            href = 'href="'
-            quotation = '"'
+            href = "href='"
+            quotation = "'"
 
             page = requests.get(url)
             webpage = html.fromstring(str(page.content))
-            webpages = webpage.xpath('//a/@href')
+            webpages = webpage.xpath("//a/@href")
 
             phrase_pages = []
             # Filter out bad or repeating links
             for p in webpages:
-                if '/@' in p and p.split('/')[-1][0] != '@' and p not in phrase_pages and 'responses' not in p:
+                if "/@" in p and p.split("/")[-1][0] != "@" and p not in phrase_pages and "responses" not in p:
                     phrase_pages.append(p)
 
             if phrase_pages != []:
                 for p in phrase_pages:
-                    all_pages.append([phrase[1], phrase_pages])
+                    # all_pages.append([phrase[1], phrase_pages])
 
                     root_dict = {}
                     # content = str(requests.get(p).content)
@@ -372,21 +372,30 @@ class Recommender(object):
                     # content = content[graf_search_end:]
                     # print(content)
 
-                    words = p.split('source=search_post')[0].split('-')
+                    words = p.split("source=search_post")[0].split("-")
                     words = words[:len(words)-1]
-                    title = ''
+                    title = ""
                     for word in words:
-                        title += word + ' '
+                        title += word + " "
 
-                    root_dict["article_url"] = p
+                    root_dict["article_url"] = quote(str(p))
+                    content = ""
+                    category = ""
                     # root_dict["content"] = quote(str(content))  # TODO find text in content
                     root_dict["title"] = quote(str(title))
+                    keyp_url_content_mapping.append([phrase, p, content, category])
+
                     root.append(root_dict)
                     # print(p)
                     # print(content)
 
                     c += 1
+
+        # mapping = self.write_suggestions_to_json(keyp_url_content_mapping)
         return root
+
+    def combine_mappings(self, mapping_1, mapping_2):
+        return mapping_1 + mapping_2
 
     def run(self, text, val):
         """
@@ -431,11 +440,15 @@ class Recommender(object):
 
         # Return mapping to console
         wiki_mapping = self.write_suggestions_to_json(mapping_list)
-        print(json.dumps(wiki_mapping))
+        # print(json.dumps(wiki_mapping))
 
         # Get page links on medium by phrase
         medium_mapping = self.get_n_listed_medium_posts(string_phrases_nouns, 2)
-        print(medium_mapping)
+        # print(medium_mapping)
+
+        # Combine jsons
+        mapping = self.combine_mappings(wiki_mapping, medium_mapping)
+        print(mapping)
 
         # TODO get from other webpages
 
