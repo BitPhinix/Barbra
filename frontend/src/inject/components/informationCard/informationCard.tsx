@@ -9,7 +9,7 @@ import {observer} from 'mobx-react';
 const InformationCardContent  = divWithClass('information-card-content');
 
 interface InformationCardProps {
-    topic: string;
+    theme: string;
     source: string;
     title: string;
     description: string;
@@ -60,7 +60,7 @@ export class InformationCard extends React.Component<InformationCardProps, any> 
         return(
             <div className="information-card" onMouseEnter={this.onHoverDisplayButtons} onMouseLeave={this.onHoverDisplayButtons}>
                 <span onClick={this.onClickExpand}>
-                    <InformationCardHeader topic={this.props.topic} source={this.props.source}/>
+                    <InformationCardHeader theme={this.props.theme} source={this.props.source}/>
                     <InformationCardContent>
                         <h5>
                             {this.props.title}

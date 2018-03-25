@@ -2,11 +2,11 @@ import './bookmarks.css';
 import * as React from 'react';
 import {render} from 'react-dom';
 import {ThemesList} from '../inject/components/themesList/themesList';
-import {InformationCard} from '../inject/components/informationCard/informationCard';
+import { InformationCard } from '../inject/components/informationCard/informationCard';
 import { Greeting } from './greeting/greeting';
 import 'bootstrap-grid/dist/grid.css';
 import {observer} from 'mobx-react';
-
+import {action} from "mobx";
 
 interface UserModel {
     firstName: string;
@@ -14,10 +14,38 @@ interface UserModel {
     bookmarkedThemes: string[];
 }
 
-@observer()
-class Bookmarks extends React.Component<UserModel, {}> {
+const fakearray = [ {
+    theme: "React",
+    source: "Medium",
+    title: "Awesome",
+    description: "Hi there"
+},
+    {
+        theme: "React",
+        source: "Medium",
+        title: "Awesome",
+        description: "Hi there"
+    },
+    {
+        theme: "React",
+        source: "Medium",
+        title: "Awesome",
+        description: "Hi there"
+    }
+];
+
+@observer
+class Bookmarks extends React.Component<UserModel, any> {
 
     private themesList : ThemesList = new ThemesList(this.props.bookmarkedThemes);
+
+    @action('display bookmarks on selected team')
+    onClickDisplayFilteredBookmarks = (theme) => {
+        const matches = this.props.bookmarks.theme == theme;
+        const filteredBookmarks = this.props.bookmarks.filter(matches);
+        const displayFilteredBookmarks = filteredBookmarks.map((value: InformationCard, index: number) => {
+        )}
+    }
 
     render() {
         return (
@@ -36,13 +64,13 @@ class Bookmarks extends React.Component<UserModel, {}> {
 
                 <div className="col-md-8">
                     <div className="row">
-                        { this.props.bookmarks.map((index: number, bookmark: InformationCard) =>
+                        {/* this.props.bookmarks.map((value: InformationCard, index: number) =>
                             <div className="col-md-6">
                                 <span key={index}>
-                                    {bookmark}
+                                    {value}
                                 </span>
                             </div>
-                        )}
+                        )*/}
                     </div>
                 </div>
             </div>
@@ -50,4 +78,4 @@ class Bookmarks extends React.Component<UserModel, {}> {
     }
 }
 
-render(<Bookmarks/>, document.getElementById("react-base"));
+render(<Bookmarks firstName={"Gabriel"} bookmarkedThemes={['React', 'Gabriel Studies']} bookmarks={fakearray}/>, document.getElementById("react-base"));
