@@ -261,13 +261,13 @@ class Recommender(object):
                 url, content, categories = self.get_wiki_url_and_content_by_keyphrase(phrase)
                 shortest = self.get_shortest_in_list(categories, phrase)
                 keyp_url_content_mapping.append([string_phrases[i][1], url, content, shortest])
-                # print(url)
+                print(url)
             except Exception:
                 try:
                     url, content, categories = self.get_wiki_url_and_content_by_keyphrase(phrase[:len(phrase.split(' '))/2])
                     shortest = self.get_shortest_in_list(categories, phrase[:len(phrase.split(' '))/2])
                     keyp_url_content_mapping.append([string_phrases[i][1], url, content, shortest])
-                    # print(url)
+                    print(url)
                 except Exception:
                     pass
                 pass
@@ -447,6 +447,7 @@ if __name__ == '__main__':
     rec = Recommender()
     for file in os.listdir(ARTICLES):
         original_text = rec.read_text_file(args.article_text)
+        print(args.article_text)
         # original_text = rec.read_text_file(ARTICLES + '/' + file)
     #     rec.run(original_text, val='article')
 
