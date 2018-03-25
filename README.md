@@ -25,7 +25,7 @@ An extension to the recommendation system would be to implement a Deep Learning 
 ## Conclusion
 the things we don’t know about will always be greater than the things we do – so we need to reliably choose what we need to learn. That’s exactly why we are creating Barbra. She provides all the guidance and inspiration you need right at your fingertips.
 
-* Built With
+## Built With
 * react
 * typescript
 * mobx
