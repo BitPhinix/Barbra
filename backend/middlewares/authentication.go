@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"fmt"
 	"net/http"
-	"errors"
+	"../controllers"
 )
 
 func AuthenticationMiddleware(c *gin.Context) {
@@ -15,8 +15,9 @@ func AuthenticationMiddleware(c *gin.Context) {
 
 	expires, err := strconv.ParseInt(fmt.Sprint(session.Get("expires")), 10, 64)
 
-	if err != nil || expires >= time.Now().Unix() {
-		c.AbortWithError(http.StatusUnauthorized, errors.New("Session expired!"))
+	if err != nil || expires <= time.Now().Unix() {
+		controllers.RespondError(c, http.StatusUnauthorized, "Session expired!")
+		c.Abort()
 		return
 	}
 

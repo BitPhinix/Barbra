@@ -1,7 +1,7 @@
 package db
 
 import (
-	config "GoBackend/config"
+	config "../config"
 	"gopkg.in/mgo.v2"
 	"log"
 )
