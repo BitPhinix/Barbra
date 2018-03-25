@@ -423,7 +423,7 @@ class Recommender(object):
         all_surrounding_tokens, all_context_tokens = self.get_all_surrounding_tokens(all_phrases_tokenized, article_text_tokenized)
 
         # Get wikipedia urls for top 5 phrases
-        mapping_list = self.get_wiki_urls_top_n_phrases(string_phrases_nouns, all_surrounding_tokens, 5)
+        mapping_list = self.get_wiki_urls_top_n_phrases(string_phrases_nouns, all_surrounding_tokens, 10)
 
         # Return mapping to console
         wiki_mapping = self.write_suggestions_to_json(mapping_list)
@@ -445,10 +445,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     rec = Recommender()
-    for file in os.listdir(ARTICLES):
-        original_text = rec.read_text_file(ARTICLES + '/' + file)
-        print(ARTICLES + '/' + file)
-        rec.run(original_text, val='article')
+    # for file in os.listdir(ARTICLES):
+    #     original_text = rec.read_text_file(ARTICLES + '/' + file)
+    #     print(ARTICLES + '/' + file)
+    #     rec.run(original_text, val='article')
         # original_text = rec.read_text_file(ARTICLES + '/' + file)
     #     rec.run(original_text, val='article')
 
@@ -457,10 +457,10 @@ if __name__ == '__main__':
     #     text = text + line + ' '
     #
 
-    # if args.article_text:
-    #     rec.run(original_text, val='article')
-    # if args.social_text:
-    #     rec.run(args.social_text, val='social')
+    if args.article_text:
+        rec.run(args.article_text, val='article')
+    elif args.social_text:
+        rec.run(args.social_text, val='social')
 
 
     # # Compare similarity of context to suggested article body
