@@ -256,16 +256,18 @@ class Recommender(object):
         keyp_url_content_mapping = []
         for i in range(n):
             phrase = string_phrases[i][1]
-            # surrounding_tokens = surrounding_tokens_list[i][2]
+            surrounding_tokens = surrounding_tokens_list[i][2]
             try:
                 url, content, categories = self.get_wiki_url_and_content_by_keyphrase(phrase)
                 shortest = self.get_shortest_in_list(categories, phrase)
                 keyp_url_content_mapping.append([string_phrases[i][1], url, content, shortest])
+                # print(url)
             except Exception:
                 try:
                     url, content, categories = self.get_wiki_url_and_content_by_keyphrase(phrase[:len(phrase.split(' '))/2])
                     shortest = self.get_shortest_in_list(categories, phrase[:len(phrase.split(' '))/2])
                     keyp_url_content_mapping.append([string_phrases[i][1], url, content, shortest])
+                    # print(url)
                 except Exception:
                     pass
                 pass
@@ -444,15 +446,15 @@ if __name__ == '__main__':
 
     rec = Recommender()
     # for file in os.listdir(ARTICLES):
-        # original_text = rec.read_text_file(ARTICLES + '/' + file)
-        # rec.run(original_text, val='article')
+    #     original_text = rec.read_text_file(ARTICLES + '/' + file)
+    #     rec.run(original_text, val='article')
 
     text = ''
-    for line in args.article_text.split('\n'):
+    for line in str(args.article_text).split('\n'):
         text = text + line + ' '
 
     if args.article_text:
-        rec.run(text, val='article')
+        rec.run(args.article_text, val='article')
     if args.social_text:
         rec.run(args.social_text, val='social')
 
