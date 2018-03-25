@@ -348,8 +348,15 @@ class Recommender(object):
             quotation = "'"
 
             page = requests.get(url)
-            webpage = html.fromstring(str(page.content))
+            content = str(page.content)
+            webpage = html.fromstring(content)
             webpages = webpage.xpath("//a/@href")
+
+            title_start = re.search('<title>', content).end()
+            content = content[title_start:]
+            title_end = re.search('</title>', content).start()
+            content = content[:title_end]
+            title = content
 
             phrase_pages = []
             # Filter out bad or repeating links
@@ -374,16 +381,13 @@ class Recommender(object):
 
                     words = p.split("source=search_post")[0].split("-")
                     words = words[:len(words)-1]
-                    title = ""
-                    for word in words:
-                        title += word + " "
 
                     root_dict["article_url"] = quote(str(p))
-                    content = ""
+                    body = ""
                     category = ""
                     # root_dict["content"] = quote(str(content))  # TODO find text in content
                     root_dict["title"] = quote(str(phrase))
-                    keyp_url_content_mapping.append([phrase, p, content, category])
+                    keyp_url_content_mapping.append([title, p, body, category])
 
                     root.append(root_dict)
                     # print(p)
