@@ -4,7 +4,6 @@ const path = require("path");
 module.exports = {
     entry: {
         inject: "./src/inject/app.tsx",
-        bookmarks: "./src/bookmarks/bookmarks.tsx",
         background: "./src/background.ts"
     },
 
