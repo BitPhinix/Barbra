@@ -3,7 +3,7 @@ import * as React from "react";
 import {observer} from "mobx-react";
 import {SidebarStore} from "../../stores/sidebar";
 import Header from "./header/header";
-import Backface, {Providers} from "../../backface";
+import Backface, {Providers} from "../../../backface";
 
 @observer
 export default class Sidebar extends React.Component<{

@@ -5,7 +5,7 @@ import SidebarStore from "./stores/sidebar";
 import Threshold from "./components/threshold/threshold";
 import {observer} from "mobx-react";
 import {render} from "react-dom";
-import Backface, {Providers} from "./backface";
+import Backface, {Providers} from "../backface";
 
 @observer
 export default class App extends React.Component<{}, {}> {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { divWithClass } from '../../helpers/divWithClass';
+import { divWithClass } from '../../inject/helpers/divWithClass';
 import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import './themesList.css';

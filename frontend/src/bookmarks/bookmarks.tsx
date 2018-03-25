@@ -1,76 +1,36 @@
 import './bookmarks.css';
 import * as React from 'react';
 import {render} from 'react-dom';
-import {ThemesList} from '../inject/components/themesList/themesList';
-import { InformationCard } from '../inject/components/informationCard/informationCard';
-import { Greeting } from './greeting/greeting';
 import 'bootstrap-grid/dist/grid.css';
 import {observer} from 'mobx-react';
-import {action} from "mobx";
-
-interface UserModel {
-    firstName: string;
-    bookmarks: InformationCard[];
-    bookmarkedThemes: string[];
-}
-
-const fakearray = [ {
-    theme: "React",
-    source: "Medium",
-    title: "Awesome",
-    description: "Hi there"
-},
-    {
-        theme: "React",
-        source: "Medium",
-        title: "Awesome",
-        description: "Hi there"
-    },
-    {
-        theme: "React",
-        source: "Medium",
-        title: "Awesome",
-        description: "Hi there"
-    }
-];
+import {ThemesList} from "./themesList/themesList";
+import { Greeting } from './greeting/greeting';
+import BookmarksInformationCardContainer from "./bookmarksInformationCardContainer/bookmarksInformationCardContainer";
+import B from "../"
 
 @observer
-class Bookmarks extends React.Component<UserModel, any> {
+class Bookmarks extends React.Component {
 
-    private themesList : ThemesList = new ThemesList(this.props.bookmarkedThemes);
+    private greeting: Greeting = new Greeting("Test");
+    private bookmarksInformationCardContainer: BookmarksInformationCardContainer = new BookmarksInformationCardContainer();
 
-    @action('display bookmarks on selected team')
-    onClickDisplayFilteredBookmarks = (theme) => {
-        const matches = this.props.bookmarks.theme == theme;
-        const filteredBookmarks = this.props.bookmarks.filter(matches);
-        const displayFilteredBookmarks = filteredBookmarks.map((value: InformationCard, index: number) => {
-        )}
+    constructor(props) {
+        super(props);
+        this.bookmarksInformationCardContainer.filterContentBookmarks('Json',);
     }
 
     render() {
         return (
-            <div className="container">
-                <div className="col-md-12">
+            <div id={"bookmark-base"}>
+                <div id={"bookmark-header"}>{this.greeting.render()}</div>
+                <div id={"bookmark-container"}>
                     <div className="row">
-                        <Greeting firstName={this.props.firstName}
-                                  isThemeSelected={this.themesList.isSelected}
-                                  selectedTheme={this.themesList.selectedTheme}/>
-                    </div>
-                </div>
-
-                <div className="col-md-4">
-                    {this.themesList.render()}
-                </div>
-
-                <div className="col-md-8">
-                    <div className="row">
-                        {/* this.props.bookmarks.map((value: InformationCard, index: number) =>
-                            <div className="col-md-6">
-                                <span key={index}>
-                                    {value}
-                                </span>
-                            </div>
-                        )*/}
+                        <div className="col-md-4">
+                            <ThemesList themes={['tammo', 'eric', 'gavri', 'tony']}/>
+                        </div>
+                        <div className="col-md-8">
+                            {this.bookmarksInformationCardContainer.render()}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -78,4 +38,4 @@ class Bookmarks extends React.Component<UserModel, any> {
     }
 }
 
-render(<Bookmarks firstName={"Gabriel"} bookmarkedThemes={['React', 'Gabriel Studies']} bookmarks={fakearray}/>, document.getElementById("react-base"));
+render(<Bookmarks/>, document.getElementById("react-base"));

@@ -2,26 +2,28 @@ import * as React from 'react';
 import './greeting.css';
 
 interface GreetingProps {
-    firstName: string;
-    isThemeSelected: boolean;
-    selectedTheme: string;
+    surname: string;
 }
 
-export function Greeting(props: GreetingProps) {
+export class Greeting extends React.Component<GreetingProps, any> {
 
-    let greeting;
+    private greeting: string;
 
-    if (props.isThemeSelected) {
-        greeting = 'Your ' + props.selectedTheme + ' content.';
-    } else {
-        greeting = 'Hi' + props.firstName + ', Welcome to Barbra';
+    constructor(props){
+        super(props);
+        this.greeting = "Hi " + this.props.surname + ", Welcome to Barbra."
     }
 
-    return (
-        <div className="greeting">
-           <h1>
-               {greeting}
-           </h1>
-        </div>
-    );
+    public setTheme(selectedTheme: string): (selectedTheme: string) => void{
+        this.greeting = 'Your ' + selectedTheme + ' content';
+        return null;
+    }
+
+    render(){
+        return(
+            <div id={"greeting"}>
+                {this.greeting}
+            </div>
+        );
+    }
 }
