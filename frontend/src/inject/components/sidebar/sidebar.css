@@ -1,0 +1,163 @@
+#injected-app > #injected-sidebar {
+    width: 380px !important;
+    height: 100vh !important;
+    position: fixed;
+    right: 0 !important;
+    top: 0 !important;
+
+    overflow-x: hidden;
+
+    background-image:  url("chrome-extension://dggckmpdanfomjckhoihbendadcdajoc/img/sidebar/background.png");
+
+    background-color: #5d5d5d;
+    background-size: cover;
+    box-shadow: -5px 0px 20px 1px rgba(0, 0, 0, 0.69);
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+
+    transition: transform 0.3s ease;
+
+    font-family: "Europa" !important;
+
+    z-index: 100000;
+}
+
+#injected-app > #injected-sidebar.opened {
+    transform: translate(0, 0);
+}
+
+#injected-app > #injected-sidebar.closed {
+    transform: translate(500px, 0);
+}
+#injected-app > #injected-sidebar::-webkit-scrollbar {
+    width: 10px;
+    background: transparent;
+}
+
+#injected-app > #injected-sidebar::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #d9d9d9;
+}
+
+#injected-app > #injected-sidebar::-webkit-scrollbar-thumb:hover {
+    background-color: white;
+}
+
+
+#injected-sidebar > #header-logo{
+    flex-grow: 0;
+
+    height: 200px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding-bottom: 30px;
+}
+
+#injected-sidebar > #header-logo > #svg-con{
+    width: 32%;
+    height: 100%;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+#injected-sidebar > #header-logo > #span-con{
+    width: 68%;
+    height: 100%;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+
+    font-size: 25pt;
+    font-weight: 600;
+    color: white;
+
+    padding-left: 6px;
+
+    margin-left: 10px;
+}
+
+#injected-sidebar > .signInButton{
+    margin-top: 25px;
+    background: transparent;
+    color: white;
+    border: white solid 2.7px;
+    border-radius: 40px;
+    width: 67%;
+    font-family: "europa", sans-serif;
+    height: 55px;
+    font-size: 25px;
+    font-weight: 600;
+    box-shadow: none !important;
+    outline: none;
+}
+
+#injected-sidebar > .signInButton:hover{
+    background: white;
+    color: #578992;
+}
+
+#injected-sidebar > .signInButton:active{
+    color: black;
+}
+
+#injected-spinner-con{
+    height: 180px;
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex-wrap: nowrap;
+}
+
+#injected-spinner{
+    width: 90%;
+    text-align: center;
+}
+
+#injected-spinner > div {
+    width: 24px;
+    height: 24px;
+    background-color: white;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 100%;
+    display: inline-block;
+    -webkit-animation: sk-bouncedelay 1.15s infinite ease-in-out both;
+    animation: sk-bouncedelay 1.15s infinite ease-in-out both;
+}
+
+#injected-spinner .bounce1 {
+    -webkit-animation-delay: -0.32s;
+    animation-delay: -0.32s;
+}
+
+#injected-spinner .bounce2 {
+    -webkit-animation-delay: -0.16s;
+    animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+    0%, 100% { -webkit-transform: scale(0.4);
+        transform: scale(0.4);}
+    50% { -webkit-transform: scale(1.0);
+        transform: scale(0.1);}
+}
+
+@keyframes sk-bouncedelay {
+    0%, 100% {
+        -webkit-transform: scale(0.4);
+        transform: scale(0.4);
+    } 50% {
+          -webkit-transform: scale(1.0);
+          transform: scale(1.0);
+      }
+}
