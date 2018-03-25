@@ -254,7 +254,7 @@ class Recommender(object):
                 counts = Counter(cats_lst)
                 category = counts.most_common(1)
                 keyp_url_content_mapping.append([string_phrases[i][1], url, content, category])
-                print(url)
+                # print(url)
             except Exception:
                 try:
                     url, content, categories = self.get_wiki_url_and_content_by_keyphrase(phrase[:len(phrase.split(' '))/2])
@@ -262,7 +262,7 @@ class Recommender(object):
                     counts = Counter(cats_lst)
                     category = counts.most_common(1)
                     keyp_url_content_mapping.append([string_phrases[i][1], url, content, category])
-                    print(url)
+                    # print(url)
                 except Exception:
                     pass
                 pass
@@ -369,7 +369,7 @@ class Recommender(object):
                 root_dict["title"] = quote(str(title))
                 root.append(root_dict)
 
-                print(p)
+                # print(p)
                 c += 1
         return root
 
@@ -419,8 +419,8 @@ class Recommender(object):
         print(json.dumps(wiki_mapping))
 
         # Get page links on medium by phrase
-        medium_mapping = self.get_n_listed_medium_posts(string_phrases_nouns, 2)
-        print(medium_mapping)
+        # medium_mapping = self.get_n_listed_medium_posts(string_phrases_nouns, 2)
+        # print(medium_mapping)
 
         # TODO get from other webpages
 
