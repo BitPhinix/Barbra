@@ -440,7 +440,7 @@ class Recommender(object):
 
         # Return mapping to console
         wiki_mapping = self.write_suggestions_to_json(mapping_list)
-        # print(json.dumps(wiki_mapping))
+        print(json.dumps(wiki_mapping))
 
         # Get page links on medium by phrase
         medium_mapping = self.get_n_listed_medium_posts(string_phrases_nouns, 2)
@@ -448,7 +448,8 @@ class Recommender(object):
 
         # Combine jsons
         mapping = self.combine_mappings(wiki_mapping, medium_mapping)
-        print(mapping)
+        # print(mapping)
+        # print(mapping['article_url'])
 
         # TODO get from other webpages
 
