@@ -6,9 +6,10 @@ from nltk.tokenize import word_tokenize
 from difflib import SequenceMatcher
 from html.parser import HTMLParser
 from stackapi import StackAPI
+from collections import Counter
+from urllib.parse import quote
 from nltk.corpus import stopwords
 from nltk.tag import pos_tag
-from urllib.parse import quote
 from rake_nltk import Rake
 from pathlib import Path
 from lxml import html
@@ -16,9 +17,10 @@ import numpy as np
 import collections
 import wikipedia
 import requests
+import argparse
+import urllib3
 import gensim
 import random
-import urllib3
 import json
 import nltk
 import time
@@ -41,6 +43,7 @@ class MLStripper(HTMLParser):
 class Recommender(object):
     def __init__(self):  # TODO do nothing?
         self.indexes_not_found = 0
+        self.val = None
 
     def read_text_file(self, file):
         """
@@ -223,6 +226,22 @@ class Recommender(object):
             text += item + ' '
         return text
 
+    def get_category_from_categories(self, phrases_list):
+        lst = []
+        bad_words = ['articles', 'links', 'containing']
+        for phrase in phrases_list:
+            phrase_words = phrase.split()
+            for word in phrase_words:
+                # if word not in bad_words and word not in stopwords.words("english"):
+                lst.append(word)
+            lst.append('.')
+
+        text = self.list_to_string(lst)
+        rec = Rake()
+        rec.extract_keywords_from_text(text)
+        cat = rec.get_ranked_phrases()
+        return cat
+
     def get_wiki_urls_top_n_phrases(self, string_phrases, surrounding_tokens_list, n):
         # TODO get proper categories
         keyp_url_content_mapping = []
@@ -231,11 +250,19 @@ class Recommender(object):
             surrounding_tokens = surrounding_tokens_list[i][2]
             try:
                 url, content, categories = self.get_wiki_url_and_content_by_keyphrase(phrase)
-                keyp_url_content_mapping.append([string_phrases[i][1], url, content])
+                cats_lst = self.get_category_from_categories(categories)
+                counts = Counter(cats_lst)
+                category = counts.most_common(1)
+                keyp_url_content_mapping.append([string_phrases[i][1], url, content, category])
+                print(url)
             except Exception:
                 try:
                     url, content, categories = self.get_wiki_url_and_content_by_keyphrase(phrase[:len(phrase.split(' '))/2])
-                    keyp_url_content_mapping.append([string_phrases[i][1], url, content])
+                    category = self.get_category_from_categories(categories)
+                    counts = Counter(cats_lst)
+                    category = counts.most_common(1)
+                    keyp_url_content_mapping.append([string_phrases[i][1], url, content, category])
+                    print(url)
                 except Exception:
                     pass
                 pass
@@ -254,6 +281,7 @@ class Recommender(object):
             root_list["article_url"] = item[1]
             root_list["content"] = quote(str(item[2]))
             root_list["title"] = quote(str(self.list_to_string(item[1].split('/')[-1].split('_'))))
+            root_list["topic"] = quote(str(item[3]))
 
             root.append(root_list)
 
@@ -296,47 +324,56 @@ class Recommender(object):
         s.feed(html)
         return s.get_data()
 
-    def get_n_listed_medium_posts(self, phrase, n):
-        root_url = 'https://medium.com/search?q='
-        first = '%20'.join(phrase.split(' '))
-        url = root_url + first
-        href = 'href="'
-        quotation = '"'
-
-        page = requests.get(url)
-        content = str(page.content)
-        webpage = html.fromstring(content)
-        webpages = webpage.xpath('//a/@href')
-
-        working_pages = []
-        # Filter out bad or repeating links
-        for p in webpages:
-            if '/@' in p and p.split('/')[-1][0] != '@' and p not in working_pages and 'responses' not in p:
-                working_pages.append(p)
-
+    def get_n_listed_medium_posts(self, phrase_list, n):
         root = []
-        for p in working_pages[:n]:
-            root_dict = {}
-            content = str(requests.get(p).content)
-            content = self.strip_tags(content)
-            content.replace('(.*)', '')
-            content.replace('{.*}', '')
-            content.replace('"."', '')
-            content = content.split(' ')
-            words = p.split('source=search_post')[0].split('-')
-            words = words[:len(words)-1]
-            title = ''
-            for word in words:
-                title += word + ' '
 
-            root_dict["article_url"] = p
-            root_dict["content"] = quote(str(content)[len(content)/2:len(content)/10*8])
-            root_dict["title"] = quote((title))
-            root.append(root_dict)
+        c = 0
+        all_pages = []
+        for phrase in phrase_list:
+            if c > n:
+                break
+            root_url = 'https://medium.com/search?q='
+            first = '%20'.join(phrase[1].split(' '))
+            url = root_url + first
+            href = 'href="'
+            quotation = '"'
 
+            page = requests.get(url)
+            content = str(page.content)
+            webpage = html.fromstring(content)
+            webpages = webpage.xpath('//a/@href')
+
+            phrase_pages = []
+            # Filter out bad or repeating links
+            for p in webpages:
+                if '/@' in p and p.split('/')[-1][0] != '@' and p not in phrase_pages and 'responses' not in p:
+                    phrase_pages.append(p)
+            if phrase_pages != []:
+                all_pages.append([phrase[1], phrase_pages])
+
+                root_dict = {}
+                # content = str(requests.get(p).content)
+                content = self.strip_tags(content)
+                content.replace('(.*)', '')
+                content.replace('{.*}', '')
+                content.replace('"."', '')
+                content = content.split(' ')
+                words = p.split('source=search_post')[0].split('-')
+                words = words[:len(words)-1]
+                title = ''
+                for word in words:
+                    title += word + ' '
+
+                root_dict["article_url"] = p
+                root_dict["content"] = quote(str(content))  # TODO find text in content
+                root_dict["title"] = quote(str(title))
+                root.append(root_dict)
+
+                print(p)
+                c += 1
         return root
 
-    def run(self, article_text, path):
+    def run(self, text, val):
         """
         TODO Improvements:
         1. casual_tokenize can't handle 'words-with-hyphens-like-this' & reduces coverage
@@ -344,17 +381,22 @@ class Recommender(object):
 
         # Remove new lines and turn to lower case
         # TODO what if only wanting to read first x lines, but that should only be for purposes of ML
-        article_text = re.sub('\n', ' ', article_text).lower()
+        self.val = val
+
+        text = re.sub('\n', ' ', text).lower()
 
         # Extract keyphrases using Rake
         # TODO also possible to extract keywords from sentence
         rake = Rake()
-        rake.extract_keywords_from_text(article_text)
+        if val == 'article':
+            rake.extract_keywords_from_text(text)
+        elif val == 'social':
+            rake.extract_keywords_from_sentences(text)
         all_phrases = rake.get_ranked_phrases_with_scores()
         word_freq_dist = rake.get_word_frequency_distribution()
 
         # Tokenize text
-        article_text_tokenized = casual_tokenize(article_text)
+        article_text_tokenized = casual_tokenize(text)
 
         # Tokenize phrases
         all_phrases_tokenized = self.tokenize_phrases(all_phrases)
@@ -377,8 +419,8 @@ class Recommender(object):
         print(json.dumps(wiki_mapping))
 
         # Get page links on medium by phrase
-        # medium_mapping = self.get_n_listed_medium_posts('learning to learn', 4)
-        # print(medium_mapping)
+        medium_mapping = self.get_n_listed_medium_posts(string_phrases_nouns, 2)
+        print(medium_mapping)
 
         # TODO get from other webpages
 
@@ -386,10 +428,20 @@ if __name__ == '__main__':
     PATH = str(Path(__file__).resolve().parents[0])
     ARTICLES = '/'.join([PATH, 'articles'])
 
+    # parser = argparse.ArgumentParser("Choose which kind of text document is passed to the recommender.")
+    # parser.add_argument('--article_text', type=str, default=None)
+    # parser.add_argument('--social_text', type=str, default=None)
+    # args = parser.parse_args()
+
     rec = Recommender()
     for file in os.listdir(ARTICLES):
         original_text = rec.read_text_file(ARTICLES + '/' + file)
-        rec.run(original_text, ARTICLES)
+        rec.run(original_text, val='article')
+
+    # if args.article_text:
+    #     rec.run(args.article_text, val='article')
+    # if args.social_text:
+    #     rec.run(args.social_text, val='social')
 
 
     # # Compare similarity of context to suggested article body
