@@ -242,6 +242,15 @@ class Recommender(object):
         cat = rec.get_ranked_phrases()
         return cat
 
+    def get_shortest_in_list(self, phrases_list, title_phrase):
+        prev = phrases_list[0]
+        for phrase in phrases_list:
+            for sub_phrase in phrase.split(' '):
+                # print('sub phrase: ', sub_phrase.lower(), '| title phrase: ', title_phrase.lower().split(' '))
+                if sub_phrase.lower() in title_phrase.lower().split(' ') and len(str(phrase)) < len(str(prev)):
+                    prev = phrase
+        return prev
+
     def get_wiki_urls_top_n_phrases(self, string_phrases, surrounding_tokens_list, n):
         # TODO get proper categories
         keyp_url_content_mapping = []
@@ -250,19 +259,13 @@ class Recommender(object):
             surrounding_tokens = surrounding_tokens_list[i][2]
             try:
                 url, content, categories = self.get_wiki_url_and_content_by_keyphrase(phrase)
-                cats_lst = self.get_category_from_categories(categories)
-                counts = Counter(cats_lst)
-                category = counts.most_common(1)[0][0]
-                keyp_url_content_mapping.append([string_phrases[i][1], url, content, category])
-                # print(url)
+                shortest = self.get_shortest_in_list(categories, phrase)
+                keyp_url_content_mapping.append([string_phrases[i][1], url, content, shortest])
             except Exception:
                 try:
                     url, content, categories = self.get_wiki_url_and_content_by_keyphrase(phrase[:len(phrase.split(' '))/2])
-                    cats_lst = self.get_category_from_categories(categories)
-                    counts = Counter(cats_lst)
-                    category = counts.most_common(1)[0][0]
-                    keyp_url_content_mapping.append([string_phrases[i][1], url, content, category])
-                    # print(url)
+                    shortest = self.get_shortest_in_list(categories, phrase[:len(phrase.split(' '))/2])
+                    keyp_url_content_mapping.append([string_phrases[i][1], url, content, shortest])
                 except Exception:
                     pass
                 pass
@@ -368,7 +371,6 @@ class Recommender(object):
                 root_dict["content"] = quote(str(content))  # TODO find text in content
                 root_dict["title"] = quote(str(title))
                 root.append(root_dict)
-
                 # print(p)
                 c += 1
         return root
