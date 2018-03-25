@@ -256,7 +256,7 @@ class Recommender(object):
         keyp_url_content_mapping = []
         for i in range(n):
             phrase = string_phrases[i][1]
-            surrounding_tokens = surrounding_tokens_list[i][2]
+            # surrounding_tokens = surrounding_tokens_list[i][2]
             try:
                 url, content, categories = self.get_wiki_url_and_content_by_keyphrase(phrase)
                 shortest = self.get_shortest_in_list(categories, phrase)
@@ -342,8 +342,7 @@ class Recommender(object):
             quotation = '"'
 
             page = requests.get(url)
-            content = str(page.content)
-            webpage = html.fromstring(content)
+            webpage = html.fromstring(str(page.content))
             webpages = webpage.xpath('//a/@href')
 
             phrase_pages = []
@@ -351,28 +350,36 @@ class Recommender(object):
             for p in webpages:
                 if '/@' in p and p.split('/')[-1][0] != '@' and p not in phrase_pages and 'responses' not in p:
                     phrase_pages.append(p)
+
             if phrase_pages != []:
-                all_pages.append([phrase[1], phrase_pages])
+                for p in phrase_pages:
+                    all_pages.append([phrase[1], phrase_pages])
 
-                root_dict = {}
-                # content = str(requests.get(p).content)
-                content = self.strip_tags(content)
-                content.replace('(.*)', '')
-                content.replace('{.*}', '')
-                content.replace('"."', '')
-                content = content.split(' ')
-                words = p.split('source=search_post')[0].split('-')
-                words = words[:len(words)-1]
-                title = ''
-                for word in words:
-                    title += word + ' '
+                    root_dict = {}
+                    content = str(requests.get(p).content)
+                    print(p)
+                    content.replace('<.*>', '')
+                    title_start = re.search('<title>')
+                    # search_end = re.search('graf--title">', content).end()
+                    # content = content[search_end:]
+                    # graf_search_end = re.search('graf-after--figure">', content).end()
+                    # content = content[graf_search_end:]
+                    print(content)
 
-                root_dict["article_url"] = p
-                root_dict["content"] = quote(str(content))  # TODO find text in content
-                root_dict["title"] = quote(str(title))
-                root.append(root_dict)
-                # print(p)
-                c += 1
+                    words = p.split('source=search_post')[0].split('-')
+                    words = words[:len(words)-1]
+                    title = ''
+                    for word in words:
+                        title += word + ' '
+
+                    root_dict["article_url"] = p
+                    root_dict["content"] = quote(str(content))  # TODO find text in content
+                    root_dict["title"] = quote(str(title))
+                    root.append(root_dict)
+                    # print(p)
+                    # print(content)
+
+                    c += 1
         return root
 
     def run(self, text, val):
@@ -430,20 +437,24 @@ if __name__ == '__main__':
     PATH = str(Path(__file__).resolve().parents[0])
     ARTICLES = '/'.join([PATH, 'articles'])
 
-    # parser = argparse.ArgumentParser("Choose which kind of text document is passed to the recommender.")
-    # parser.add_argument('--article_text', type=str, default=None)
-    # parser.add_argument('--social_text', type=str, default=None)
-    # args = parser.parse_args()
+    parser = argparse.ArgumentParser("Choose which kind of text document is passed to the recommender.")
+    parser.add_argument('--article_text', type=str, default=None)
+    parser.add_argument('--social_text', type=str, default=None)
+    args = parser.parse_args()
 
     rec = Recommender()
-    for file in os.listdir(ARTICLES):
-        original_text = rec.read_text_file(ARTICLES + '/' + file)
-        rec.run(original_text, val='article')
+    # for file in os.listdir(ARTICLES):
+        # original_text = rec.read_text_file(ARTICLES + '/' + file)
+        # rec.run(original_text, val='article')
 
-    # if args.article_text:
-    #     rec.run(args.article_text, val='article')
-    # if args.social_text:
-    #     rec.run(args.social_text, val='social')
+    text = ''
+    for line in args.article_text.split('\n'):
+        text = text + line + ' '
+
+    if args.article_text:
+        rec.run(text, val='article')
+    if args.social_text:
+        rec.run(args.social_text, val='social')
 
 
     # # Compare similarity of context to suggested article body

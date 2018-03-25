@@ -39,4 +39,5 @@
 
 .invisible {
     visibility: hidden;
+    transition: visibility 2s ease;
 }
