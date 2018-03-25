@@ -1,4 +1,4 @@
-.btn {
+.btn-barbra {
     font-family: "europa", sans-serif;
 
     font-style: normal;
@@ -16,11 +16,9 @@
     align-items: center;
 }
 
-.btn:hover {
+.btn-barbra:hover {
     background: rgba(237, 237, 237, 0.88);
 }
-
-
 
 .selected {
     color: #D96D32;

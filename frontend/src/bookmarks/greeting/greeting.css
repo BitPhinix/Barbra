@@ -1,0 +1,10 @@
+.greeting {
+    padding-top: 56px;
+    padding-bottom: 56px;
+}
+
+.greeting h1 {
+    font-weight: 700;
+    font-size: 64px;
+    color: #ffffff;
+}

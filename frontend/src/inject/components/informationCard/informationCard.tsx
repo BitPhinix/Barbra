@@ -49,20 +49,12 @@ export class InformationCard extends React.Component<InformationCardProps, any> 
 
     render() {
 
-        let buttons;
+        let isInvisible;
 
         if(this.isHovering) {
-            buttons = <span className="button-card-span-parent">
-                         <span onClick={this.onClickBookmark} className="button-card-span-left">
-                            <ButtonCard buttonType={ButtonCardType.Bookmark}/>
-                         </span>
-
-                        <span onClick={this.onClickDelete} className="button-card-span-right">
-                            <ButtonCard buttonType={ButtonCardType.Delete}/>
-                        </span>
-                    </span>;
+            isInvisible = '';
         } else {
-            buttons = <div className="button-card-span-no-hover"/>;
+            isInvisible = 'invisible';
         }
 
         return(
@@ -79,7 +71,15 @@ export class InformationCard extends React.Component<InformationCardProps, any> 
                     </InformationCardContent>
                 </span>
 
-                {buttons}
+                <span className={'button-card-span-parent' + ' ' + isInvisible}>
+                         <span onClick={this.onClickBookmark} className="button-card-span-left">
+                            <ButtonCard buttonType={ButtonCardType.Bookmark}/>
+                         </span>
+
+                        <span onClick={this.onClickDelete} className="button-card-span-right">
+                            <ButtonCard buttonType={ButtonCardType.Delete}/>
+                        </span>
+                    </span>
             </div>
         );
     }
