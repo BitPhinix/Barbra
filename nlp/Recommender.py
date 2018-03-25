@@ -10,6 +10,7 @@ from collections import Counter
 from urllib.parse import quote
 from nltk.corpus import stopwords
 from nltk.tag import pos_tag
+from bs4 import BeautifulSoup
 from rake_nltk import Rake
 from pathlib import Path
 from lxml import html
@@ -27,6 +28,9 @@ import time
 import os
 import re
 
+"""
+Execution: python -W ignore Recommender.py --article_text article.txt
+"""
 
 class MLStripper(HTMLParser):
     def __init__(self):
@@ -358,15 +362,15 @@ class Recommender(object):
                     all_pages.append([phrase[1], phrase_pages])
 
                     root_dict = {}
-                    content = str(requests.get(p).content)
-                    print(p)
-                    content.replace('<.*>', '')
-                    title_start = re.search('<title>')
+                    # content = str(requests.get(p).content)
+                    # print(p)
+                    # content.replace('<.*>', '')
+                    # title_start = re.search('<title>')
                     # search_end = re.search('graf--title">', content).end()
                     # content = content[search_end:]
                     # graf_search_end = re.search('graf-after--figure">', content).end()
                     # content = content[graf_search_end:]
-                    print(content)
+                    # print(content)
 
                     words = p.split('source=search_post')[0].split('-')
                     words = words[:len(words)-1]
@@ -375,7 +379,7 @@ class Recommender(object):
                         title += word + ' '
 
                     root_dict["article_url"] = p
-                    root_dict["content"] = quote(str(content))  # TODO find text in content
+                    # root_dict["content"] = quote(str(content))  # TODO find text in content
                     root_dict["title"] = quote(str(title))
                     root.append(root_dict)
                     # print(p)
@@ -430,8 +434,8 @@ class Recommender(object):
         print(json.dumps(wiki_mapping))
 
         # Get page links on medium by phrase
-        # medium_mapping = self.get_n_listed_medium_posts(string_phrases_nouns, 2)
-        # print(medium_mapping)
+        medium_mapping = self.get_n_listed_medium_posts(string_phrases_nouns, 2)
+        print(medium_mapping)
 
         # TODO get from other webpages
 
