@@ -439,24 +439,24 @@ if __name__ == '__main__':
     PATH = str(Path(__file__).resolve().parents[0])
     ARTICLES = '/'.join([PATH, 'articles'])
 
-    parser = argparse.ArgumentParser("Choose which kind of text document is passed to the recommender.")
-    parser.add_argument('--article_text', type=str, default=None)
-    parser.add_argument('--social_text', type=str, default=None)
-    args = parser.parse_args()
+    # parser = argparse.ArgumentParser("Choose which kind of text document is passed to the recommender.")
+    # parser.add_argument('--article_text', type=str, default=None)
+    # parser.add_argument('--social_text', type=str, default=None)
+    # args = parser.parse_args()
 
     rec = Recommender()
-    # for file in os.listdir(ARTICLES):
-    #     original_text = rec.read_text_file(ARTICLES + '/' + file)
-    #     rec.run(original_text, val='article')
+    for file in os.listdir(ARTICLES):
+        original_text = rec.read_text_file(ARTICLES + '/' + file)
+        rec.run(original_text, val='article')
 
-    text = ''
-    for line in str(args.article_text).split('\n'):
-        text = text + line + ' '
-
-    if args.article_text:
-        rec.run(args.article_text, val='article')
-    if args.social_text:
-        rec.run(args.social_text, val='social')
+    # text = ''
+    # for line in str(args.article_text).split('\n'):
+    #     text = text + line + ' '
+    #
+    # if args.article_text:
+    #     rec.run(args.article_text, val='article')
+    # if args.social_text:
+    #     rec.run(args.social_text, val='social')
 
 
     # # Compare similarity of context to suggested article body
