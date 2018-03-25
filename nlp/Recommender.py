@@ -10,6 +10,7 @@ from collections import Counter
 from urllib.parse import quote
 from nltk.corpus import stopwords
 from nltk.tag import pos_tag
+from bs4 import BeautifulSoup
 from rake_nltk import Rake
 from pathlib import Path
 from lxml import html
@@ -27,6 +28,9 @@ import time
 import os
 import re
 
+"""
+Execution: python -W ignore Recommender.py --article_text article.txt
+"""
 
 class MLStripper(HTMLParser):
     def __init__(self):
@@ -261,11 +265,13 @@ class Recommender(object):
                 url, content, categories = self.get_wiki_url_and_content_by_keyphrase(phrase)
                 shortest = self.get_shortest_in_list(categories, phrase)
                 keyp_url_content_mapping.append([string_phrases[i][1], url, content, shortest])
+                # print(url)
             except Exception:
                 try:
                     url, content, categories = self.get_wiki_url_and_content_by_keyphrase(phrase[:len(phrase.split(' '))/2])
                     shortest = self.get_shortest_in_list(categories, phrase[:len(phrase.split(' '))/2])
                     keyp_url_content_mapping.append([string_phrases[i][1], url, content, shortest])
+                    # print(url)
                 except Exception:
                     pass
                 pass
@@ -331,56 +337,65 @@ class Recommender(object):
         root = []
 
         c = 0
-        all_pages = []
+        keyp_url_content_mapping = []
         for phrase in phrase_list:
             if c > n:
                 break
-            root_url = 'https://medium.com/search?q='
-            first = '%20'.join(phrase[1].split(' '))
+            root_url = "https://medium.com/search?q="
+            first = "%20".join(phrase[1].split(" "))
             url = root_url + first
-            href = 'href="'
-            quotation = '"'
+            href = "href='"
+            quotation = "'"
 
             page = requests.get(url)
             webpage = html.fromstring(str(page.content))
-            webpages = webpage.xpath('//a/@href')
+            webpages = webpage.xpath("//a/@href")
 
             phrase_pages = []
             # Filter out bad or repeating links
             for p in webpages:
-                if '/@' in p and p.split('/')[-1][0] != '@' and p not in phrase_pages and 'responses' not in p:
+                if "/@" in p and p.split("/")[-1][0] != "@" and p not in phrase_pages and "responses" not in p:
                     phrase_pages.append(p)
 
             if phrase_pages != []:
                 for p in phrase_pages:
-                    all_pages.append([phrase[1], phrase_pages])
+                    # all_pages.append([phrase[1], phrase_pages])
 
                     root_dict = {}
-                    content = str(requests.get(p).content)
-                    print(p)
-                    content.replace('<.*>', '')
-                    title_start = re.search('<title>')
+                    # content = str(requests.get(p).content)
+                    # print(p)
+                    # content.replace('<.*>', '')
+                    # title_start = re.search('<title>')
                     # search_end = re.search('graf--title">', content).end()
                     # content = content[search_end:]
                     # graf_search_end = re.search('graf-after--figure">', content).end()
                     # content = content[graf_search_end:]
-                    print(content)
+                    # print(content)
 
-                    words = p.split('source=search_post')[0].split('-')
+                    words = p.split("source=search_post")[0].split("-")
                     words = words[:len(words)-1]
-                    title = ''
+                    title = ""
                     for word in words:
-                        title += word + ' '
+                        title += word + " "
 
-                    root_dict["article_url"] = p
-                    root_dict["content"] = quote(str(content))  # TODO find text in content
+                    root_dict["article_url"] = quote(str(p))
+                    content = ""
+                    category = ""
+                    # root_dict["content"] = quote(str(content))  # TODO find text in content
                     root_dict["title"] = quote(str(title))
+                    keyp_url_content_mapping.append([phrase, p, content, category])
+
                     root.append(root_dict)
                     # print(p)
                     # print(content)
 
                     c += 1
+
+        # mapping = self.write_suggestions_to_json(keyp_url_content_mapping)
         return root
+
+    def combine_mappings(self, mapping_1, mapping_2):
+        return mapping_1 + mapping_2
 
     def run(self, text, val):
         """
@@ -421,15 +436,20 @@ class Recommender(object):
         all_surrounding_tokens, all_context_tokens = self.get_all_surrounding_tokens(all_phrases_tokenized, article_text_tokenized)
 
         # Get wikipedia urls for top 5 phrases
-        mapping_list = self.get_wiki_urls_top_n_phrases(string_phrases_nouns, all_surrounding_tokens, 5)
+        mapping_list = self.get_wiki_urls_top_n_phrases(string_phrases_nouns, all_surrounding_tokens, 10)
 
         # Return mapping to console
         wiki_mapping = self.write_suggestions_to_json(mapping_list)
         print(json.dumps(wiki_mapping))
 
         # Get page links on medium by phrase
-        # medium_mapping = self.get_n_listed_medium_posts(string_phrases_nouns, 2)
+        medium_mapping = self.get_n_listed_medium_posts(string_phrases_nouns, 2)
         # print(medium_mapping)
+
+        # Combine jsons
+        mapping = self.combine_mappings(wiki_mapping, medium_mapping)
+        # print(mapping)
+        # print(mapping['article_url'])
 
         # TODO get from other webpages
 
@@ -443,18 +463,21 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     rec = Recommender()
-    # for file in os.listdir(ARTICLES):
+    for file in os.listdir(ARTICLES):
+        original_text = rec.read_text_file(ARTICLES + '/' + file)
+        rec.run(original_text, val='article')
         # original_text = rec.read_text_file(ARTICLES + '/' + file)
-        # rec.run(original_text, val='article')
+    #     rec.run(original_text, val='article')
 
-    text = ''
-    for line in args.article_text.split('\n'):
-        text = text + line + ' '
+    # text = ''
+    # for line in str(args.article_text).split('\n'):
+    #     text = text + line + ' '
+    #
 
-    if args.article_text:
-        rec.run(text, val='article')
-    if args.social_text:
-        rec.run(args.social_text, val='social')
+    # if args.article_text:
+    #     rec.run(args.article_text, val='article')
+    # elif args.social_text:
+    #     rec.run(args.social_text, val='social')
 
 
     # # Compare similarity of context to suggested article body
