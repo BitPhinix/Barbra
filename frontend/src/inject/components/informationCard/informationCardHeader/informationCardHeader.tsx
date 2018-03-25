@@ -13,7 +13,7 @@ export function InformationCardHeader(props: InformationCardHeaderProps) {
             <div className="text-12">
                 {props.theme}
                 <div className='information-card-header-img'>
-                    <img src={'../../../static/sourceIcons/' + props.source + '.png'} className="information-card-header-img-img"/>
+                    <img src={'chrome-extension://dggckmpdanfomjckhoihbendadcdajoc/sourceIcons/' + props.source + '.png'} className="information-card-header-img-img"></img>
                 </div>
             </div>
         </div>
