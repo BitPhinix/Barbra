@@ -232,8 +232,8 @@ class Recommender(object):
         for phrase in phrases_list:
             phrase_words = phrase.split()
             for word in phrase_words:
-                # if word not in bad_words and word not in stopwords.words("english"):
-                lst.append(word)
+                if word not in bad_words and word not in stopwords.words("english"):
+                    lst.append(word)
             lst.append('.')
 
         text = self.list_to_string(lst)
@@ -252,15 +252,15 @@ class Recommender(object):
                 url, content, categories = self.get_wiki_url_and_content_by_keyphrase(phrase)
                 cats_lst = self.get_category_from_categories(categories)
                 counts = Counter(cats_lst)
-                category = counts.most_common(1)
+                category = counts.most_common(1)[0][0]
                 keyp_url_content_mapping.append([string_phrases[i][1], url, content, category])
                 # print(url)
             except Exception:
                 try:
                     url, content, categories = self.get_wiki_url_and_content_by_keyphrase(phrase[:len(phrase.split(' '))/2])
-                    category = self.get_category_from_categories(categories)
+                    cats_lst = self.get_category_from_categories(categories)
                     counts = Counter(cats_lst)
-                    category = counts.most_common(1)
+                    category = counts.most_common(1)[0][0]
                     keyp_url_content_mapping.append([string_phrases[i][1], url, content, category])
                     # print(url)
                 except Exception:
