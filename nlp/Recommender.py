@@ -445,10 +445,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     rec = Recommender()
-    # for file in os.listdir(ARTICLES):
-    #     original_text = rec.read_text_file(ARTICLES + '/' + file)
-    #     print(ARTICLES + '/' + file)
-    #     rec.run(original_text, val='article')
+    for file in os.listdir(ARTICLES):
+        original_text = rec.read_text_file(ARTICLES + '/' + file)
+        print(ARTICLES + '/' + file)
+        rec.run(original_text, val='article')
         # original_text = rec.read_text_file(ARTICLES + '/' + file)
     #     rec.run(original_text, val='article')
 
@@ -457,10 +457,10 @@ if __name__ == '__main__':
     #     text = text + line + ' '
     #
 
-    if args.article_text:
-        rec.run(args.article_text, val='article')
-    elif args.social_text:
-        rec.run(args.social_text, val='social')
+    # if args.article_text:
+    #     rec.run(args.article_text, val='article')
+    # elif args.social_text:
+    #     rec.run(args.social_text, val='social')
 
 
     # # Compare similarity of context to suggested article body
