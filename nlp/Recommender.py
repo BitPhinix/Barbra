@@ -444,11 +444,11 @@ class Recommender(object):
 
         # Get page links on medium by phrase
         medium_mapping = self.get_n_listed_medium_posts(string_phrases_nouns, 2)
-        # print(medium_mapping)
+        # print(json.dumps(medium_mapping))
 
         # Combine jsons
         mapping = self.combine_mappings(wiki_mapping, medium_mapping)
-        print(mapping)
+        print(json.dumps(mapping))
 
         # TODO get from other webpages
 
