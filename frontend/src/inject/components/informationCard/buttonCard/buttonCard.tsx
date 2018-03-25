@@ -4,8 +4,8 @@ import { observer } from 'mobx-react';
 import './buttonCard.css';
 
 export enum ButtonCardType {
-    Delete = 'btn btn-card-right',
-    Bookmark = 'btn btn-card-left',
+    Delete = 'btn-barbra btn-card-right',
+    Bookmark = 'btn-barbra btn-card-left',
 }
 
 interface ButtonCardProps {

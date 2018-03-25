@@ -7,6 +7,10 @@
     overflow: hidden;
 }
 
+.information-card-focused {
+    min-height: 400px;
+}
+
 .information-card-content {
     padding: 16px 16px 0 16px;
 }
@@ -33,7 +37,6 @@
     border-top: 1px solid #E0E0E0;
 }
 
-.button-card-span-no-hover {
-    min-height: 33px;
-    flex-shrink: 0;
+.invisible {
+    visibility: hidden;
 }
