@@ -3,15 +3,15 @@ import * as React from "react";
 import {observer} from "mobx-react";
 import {SidebarStore} from "../../stores/sidebar";
 import Header from "./header/header";
-import Backface, {Providers} from "../../backface";
+import * as BackDispatcher from "../../backDispatcher";
 
 @observer
 export default class Sidebar extends React.Component<{
-    store: SidebarStore,
-    backface: Backface
+    store: SidebarStore
 }, {}> {
 
     private reference: HTMLElement;
+    private initial: boolean = true;
 
     constructor(props){
         super(props);
@@ -25,16 +25,28 @@ export default class Sidebar extends React.Component<{
 
         });
 
-        this.props.store.state = [
-            //loading animation
-        ]
+        BackDispatcher.addListener("return_initial", (message) => {
+            if(message && this.initial){
+                this.loadEmptyPage(message["surname"]);
+                this.props.store.showHeader = true;
+                this.initial = false;
+            }
+            else
+                this.props.store.loadLoadingPage();
+        });
+        BackDispatcher.addListener("return_login", (message) => {
+            if(message["surname"]){
+                this.loadEmptyPage(message["surname"]);
+                this.props.store.showHeader = true;
+            }
+            else
+                this.loadLoginPage();
+        });
     }
 
     componentDidMount(){
-        //check cookie exists
-
-        //not
         this.loadLoginPage();
+        BackDispatcher.sendMessage("get_initial");
     }
 
     private loadLoginPage(){
@@ -52,22 +64,31 @@ export default class Sidebar extends React.Component<{
                     </span>
                 </div>
             </div>,
-            <button className={"signInButton"} onClick={() => this.handleOnLogin(Providers.Google)}>G sign in</button>,
-            <button className={"signInButton"} onClick={() => this.handleOnLogin(Providers.Facebook)}>f sign in</button>
+            <button className={"signInButton"} onClick={() => this.handleOnLogin("google")}>G sign in</button>,
+            <button className={"signInButton"} onClick={() => this.handleOnLogin("facebook")}>f sign in</button>
         ]
     }
 
-    private handleOnLogin(provider: Providers){
+    private loadEmptyPage(surname: string){
+        this.props.store.state = [
+            <div id={"empty-header"}>
+                Hi {surname}
+            </div>,
+            <div id={"empty-base"}>
+                Browse around and we'll find<br/>content that you will like
+            </div>
+        ];
+    }
+
+    private handleOnLogin(provider: string){
         this.props.store.loadLoadingPage();
-        this.props.backface.login(provider, (response: JSON) => {
-            let popup = open(response["url"], "Authorize", "width=800,height=600,toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no");
-        });
+        BackDispatcher.sendMessage("get_login", {provider: provider})
     }
 
     render() {
         return(
             <div ref={(node) => this.reference = node} id={"injected-sidebar"} className={this.props.store.visible ? "opened" : "closed"}>
-                <Header/>
+                <Header visible={this.props.store.showHeader}/>
                 {this.props.store.state}
             </div>
         );

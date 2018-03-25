@@ -3,11 +3,13 @@ import * as React from "react";
 import {observer} from "mobx-react";
 
 @observer
-export default class Header extends React.Component<{}, {}> {
+export default class Header extends React.Component<{
+    visible: boolean
+}, {}> {
 
     render() {
         return(
-            <div id={"injected-header"}>
+            <div id={"injected-header"} className={this.props.visible ? "visible" : "hidden"}>
                 <div id={"header-logo"}>
                     <div id={"svg-con"}>
                         <svg height={"24px"} xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 32 37">

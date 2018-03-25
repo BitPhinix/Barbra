@@ -17,6 +17,7 @@
   "permissions":[
     "background",
     "activeTab",
+    "storage",
     "tabs",
     "http://*/*",
     "https://*/*"
