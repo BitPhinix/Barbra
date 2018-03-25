@@ -444,8 +444,8 @@ if __name__ == '__main__':
 
     rec = Recommender()
     # for file in os.listdir(ARTICLES):
-    #     original_text = rec.read_text_file(ARTICLES + '/' + file)
-    #     rec.run(original_text, val='article')
+        # original_text = rec.read_text_file(ARTICLES + '/' + file)
+        # rec.run(original_text, val='article')
 
     if args.article_text:
         rec.run(args.article_text, val='article')
