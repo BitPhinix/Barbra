@@ -2,14 +2,14 @@ package models
 
 import (
 	"strings"
-	"GoBackend/db"
+	"../db"
 	"gopkg.in/mgo.v2/bson"
 	"errors"
 )
 
 type UserAccount struct {
-	Email string `json:"email" bson:"_id"`
-	Name string `json:"name" bson:"name"`
+	Email   string `json:"email" bson:"_id"`
+	Name    string `json:"name" bson:"name"`
 	Surname string `json:"surname" bson:"surname"`
 }
 
@@ -30,9 +30,9 @@ func RegisterAccount(email string, name string, surname string) (*UserAccount, e
 	userCollection := db.GetDB().C("users")
 
 	account := &UserAccount{
-		Email:email,
-		Name:name,
-		Surname:surname,
+		Email:   email,
+		Name:    name,
+		Surname: surname,
 	}
 
 	account.Normalize()

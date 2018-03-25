@@ -1,10 +1,10 @@
 package main
 
 import (
-	"GoBackend/db"
-	"GoBackend/config"
+	"./db"
+	"./config"
 	"flag"
-	"GoBackend/server"
+	"./server"
 )
 
 func main() {

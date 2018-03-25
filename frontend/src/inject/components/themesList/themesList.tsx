@@ -8,13 +8,15 @@ const ThemesListHeader = divWithClass('themes-list-header');
 const ThemesListContent = divWithClass('themes-list-content');
 
 interface ThemesListProps {
-    items: string[];
+    themes: string[];
 }
 
 @observer
 export class ThemesList extends React.Component<ThemesListProps, any> {
 
     @observable activeIndex: number;
+    @observable isSelected: boolean;
+    @observable selectedTheme: string;
 
     constructor(props) {
         super(props);
@@ -23,13 +25,12 @@ export class ThemesList extends React.Component<ThemesListProps, any> {
     @action('select item')
     selectItem = (index: number) => {
         this.activeIndex = index;
+        this.selectedTheme = this.props.themes[index];
+        this.isSelected = true;
     };
 
 
     render() {
-
-        console.log(document.querySelector(".themes-list-content > ul:last-child li:last-child"));
-
         return (
             <div className="themes-list">
                 <ThemesListHeader>
@@ -38,10 +39,10 @@ export class ThemesList extends React.Component<ThemesListProps, any> {
 
                 <ThemesListContent>
                     <ul>
-                        {this.props.items.map((item: string, index: number) =>
+                        {this.props.themes.map((theme: string, index: number) =>
                             <span onClick={() => this.selectItem(index)}>
                                 <ThemesListItem key={index} active={index === this.activeIndex}>
-                                    {item}
+                                    {theme}
                                 </ThemesListItem>
                             </span>
                         )}

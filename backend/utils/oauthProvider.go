@@ -9,6 +9,9 @@ import (
 	"context"
 	"net/http"
 	"github.com/gin-gonic/gin/json"
+	"../config"
+	"../models"
+	"fmt"
 )
 
 var (
@@ -54,14 +57,13 @@ func NewFacebookOAuthProvider(clientId string, clientSecret string) (*OAuthProvi
 			},
 		},
 		providerId:      Facebook,
-		profileQueryUrl: "https://graph.facebook.com/me?fields=id,first_name,last_name",
+		profileQueryUrl: "https://graph.facebook.com/me?fields=id,first_name,last_name,email",
 	}
 }
 
 func getAuthUrl() string {
-	//c := config.GetConfig()
-	return "http://localhost:8080/api/v1/oauth/auth";
-	//return c.GetString("server.host") + c.GetString("server.port") + "/api/v1/oauth/auth"
+	c := config.GetConfig()
+	return c.GetString("server.host") + "/api/v1/oauth/auth"
 }
 
 func (provider OAuthProvider) GetLoginUrl(state string) string {
@@ -87,10 +89,52 @@ func (provider OAuthProvider) FetchJson(client *http.Client, url string, result 
 	return json.NewDecoder(r.Body).Decode(result)
 }
 
-func (provider OAuthProvider) GetUserAccount(client *http.Client) (interface{}) {
-	result := new(map[string]interface{})
-	provider.FetchJson(client, provider.profileQueryUrl, result)
-	return result
+//It´s ugly .... but nobody will read this (hopefully ^^)
+func (provider OAuthProvider) GetUserAccount(client *http.Client) (*models.UserAccount, error) {
+	result := make(map[string]interface{})
+	provider.FetchJson(client, provider.profileQueryUrl, &result)
+
+	oAuthAccount := new(models.OAuthAccount)
+	var err error;
+	if provider.providerId == Google {
+		oAuthAccount, err = models.GetOAuthAccount(provider.providerId, fmt.Sprint(result["id"]))
+
+		if err != nil {
+			userAccount, err := models.RegisterAccount(fmt.Sprint(result["email"]), fmt.Sprint(result["family_name"]), fmt.Sprint(result["given_name"]))
+
+			if err != nil {
+				return nil, err
+			}
+
+			oAuthAccount, err = models.RegisterOAuthAccount(provider.providerId, fmt.Sprint(result["id"]), userAccount.Email)
+
+			if err != nil {
+				return nil, err
+			}
+
+			return userAccount, nil
+		}
+	} else if provider.providerId == Facebook {
+		oAuthAccount, err = models.GetOAuthAccount(provider.providerId, fmt.Sprint(result["id"]))
+
+		if err != nil {
+			userAccount, err := models.RegisterAccount(fmt.Sprint(result["email"]), fmt.Sprint(result["last_name"]), fmt.Sprint(result["first_name"]))
+
+			if err != nil {
+				return nil, err
+			}
+
+			oAuthAccount, err = models.RegisterOAuthAccount(provider.providerId, fmt.Sprint(result["id"]), userAccount.Email)
+
+			if err != nil {
+				return nil, err
+			}
+
+			return userAccount, nil
+		}
+	}
+
+	return models.GetAccount(oAuthAccount.UserID)
 }
 
 func RandomToken(n int) string {
