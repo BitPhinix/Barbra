@@ -446,8 +446,9 @@ if __name__ == '__main__':
 
     rec = Recommender()
     for file in os.listdir(ARTICLES):
-        original_text = rec.read_text_file(args.article_text)
-        print(args.article_text)
+        original_text = rec.read_text_file(ARTICLES + '/' + file)
+        print(ARTICLES + '/' + file)
+        rec.run(original_text, val='article')
         # original_text = rec.read_text_file(ARTICLES + '/' + file)
     #     rec.run(original_text, val='article')
 
@@ -456,10 +457,10 @@ if __name__ == '__main__':
     #     text = text + line + ' '
     #
 
-    if args.article_text:
-        rec.run(original_text, val='article')
-    if args.social_text:
-        rec.run(args.social_text, val='social')
+    # if args.article_text:
+    #     rec.run(original_text, val='article')
+    # if args.social_text:
+    #     rec.run(args.social_text, val='social')
 
 
     # # Compare similarity of context to suggested article body
