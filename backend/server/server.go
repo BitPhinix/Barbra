@@ -1,7 +1,7 @@
 package server
 
 import (
-	"GoBackend/config"
+	"../config"
 )
 
 func Run() {

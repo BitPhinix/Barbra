@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"fmt"
 	"strconv"
-	"GoBackend/payloads"
-	"GoBackend/models"
+	"../payloads"
+	"../models"
 )
 
 type Bookmark struct{}

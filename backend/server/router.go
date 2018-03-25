@@ -2,11 +2,11 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
-	"GoBackend/middlewares"
-	"GoBackend/config"
+	"../middlewares"
+	"../config"
 	"github.com/gin-contrib/sessions"
 	"net/http"
-	"GoBackend/controllers"
+	"../controllers"
 	"github.com/gin-contrib/static"
 )
 

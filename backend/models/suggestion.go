@@ -1,7 +1,7 @@
 package models
 
 import (
-	"GoBackend/db"
+	"../db"
 	"gopkg.in/mgo.v2/bson"
 	"log"
 )

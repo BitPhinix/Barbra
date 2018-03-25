@@ -9,8 +9,8 @@ import (
 	"context"
 	"net/http"
 	"github.com/gin-gonic/gin/json"
-	"GoBackend/config"
-	"GoBackend/models"
+	"../config"
+	"../models"
 	"fmt"
 )
 

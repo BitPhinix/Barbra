@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"GoBackend/utils"
-	"GoBackend/config"
+	"../utils"
+	"../config"
 	"net/http"
 	"github.com/gin-contrib/sessions"
 	"fmt"

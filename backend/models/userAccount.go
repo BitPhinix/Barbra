@@ -2,7 +2,7 @@ package models
 
 import (
 	"strings"
-	"GoBackend/db"
+	"../db"
 	"gopkg.in/mgo.v2/bson"
 	"errors"
 )

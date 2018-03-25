@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"fmt"
 	"net/http"
-	"GoBackend/controllers"
+	"../controllers"
 )
 
 func AuthenticationMiddleware(c *gin.Context) {

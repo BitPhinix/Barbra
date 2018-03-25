@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"GoBackend/models"
+	"../models"
 	"net/http"
 	"github.com/gin-contrib/sessions"
 	"fmt"

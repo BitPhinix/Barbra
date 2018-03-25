@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"net/http"
 	"os/exec"
-	"GoBackend/config"
+	"../config"
 	"encoding/json"
-	"GoBackend/models"
+	"../models"
 )
 
 type Suggestion struct{}
@@ -18,6 +18,7 @@ func (Suggestion) GetSuggestions(c *gin.Context) {
 
 	if len(query) < 5 {
 		RespondError(c, http.StatusBadRequest, "Invalid query string!")
+		return
 	}
 
 	cmd := exec.Command("python3", cnfig.GetString("nlp.script_location"))
