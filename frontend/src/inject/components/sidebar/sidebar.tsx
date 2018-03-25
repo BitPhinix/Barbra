@@ -4,6 +4,7 @@ import {observer} from "mobx-react";
 import {SidebarStore} from "../../stores/sidebar";
 import Header from "./header/header";
 import * as BackDispatcher from "../../backDispatcher";
+import InformationCard from "../informationCard/informationCard"
 
 @observer
 export default class Sidebar extends React.Component<{
@@ -22,10 +23,11 @@ export default class Sidebar extends React.Component<{
                 if(this.reference.compareDocumentPosition(event.target as Node) === 2){
                     this.props.store.visible = false;
                 }
-
         });
 
         BackDispatcher.addListener("return_initial", (message) => {
+            console.log("Called return_initial");
+
             if(message && this.initial){
                 this.loadEmptyPage(message["surname"]);
                 this.props.store.showHeader = true;
@@ -35,12 +37,25 @@ export default class Sidebar extends React.Component<{
                 this.props.store.loadLoadingPage();
         });
         BackDispatcher.addListener("return_login", (message) => {
+            console.log("Called return_login");
+
             if(message["surname"]){
                 this.loadEmptyPage(message["surname"]);
                 this.props.store.showHeader = true;
             }
             else
                 this.loadLoginPage();
+        });
+        BackDispatcher.addListener("return_suggestion", (message: {topic:string,
+            title: string, content: string, article_url:string, id:string}[]) => {
+            console.log("Called return_suggestion");
+
+            let newState: JSX.Element[] = [];
+            message = message.slice(0,2);
+            message.map(value => {
+               newState.push(<InformationCard sourceUrl={decodeURI(value.article_url)} theme={decodeURI(value.topic)} source={value.article_url.split(".")[1]} title={decodeURI(value.title)} description={decodeURI(value.content)}/>);
+            });
+            this.props.store.state = newState;
         });
     }
 
@@ -78,6 +93,8 @@ export default class Sidebar extends React.Component<{
                 Browse around and we'll find<br/>content that you will like
             </div>
         ];
+        let toQuery: string = document.body.innerText.trim();
+        BackDispatcher.sendMessage("get_suggestion", toQuery);
     }
 
     private handleOnLogin(provider: string){

@@ -17,7 +17,7 @@ interface InformationCardProps {
 }
 
 @observer
-export class InformationCard extends React.Component<InformationCardProps, any> {
+export default class InformationCard extends React.Component<InformationCardProps, any> {
 
     @observable isHovering: boolean;
     @observable stringMaxLength: number;
@@ -25,6 +25,7 @@ export class InformationCard extends React.Component<InformationCardProps, any> 
     constructor(props:any) {
         super(props);
         this.stringMaxLength = 130;
+        this.isHovering = false;
     }
 
     @action('handle onClick')
@@ -53,14 +54,6 @@ export class InformationCard extends React.Component<InformationCardProps, any> 
 
     render() {
 
-        let isInvisible;
-
-        if(this.isHovering) {
-            isInvisible = '';
-        } else {
-            isInvisible = 'invisible';
-        }
-
         return(
             <div className="information-card" onMouseEnter={this.onHoverDisplayButtons} onMouseLeave={this.onHoverDisplayButtons}>
                 <span onClick={this.onClickExpand}>
@@ -75,7 +68,7 @@ export class InformationCard extends React.Component<InformationCardProps, any> 
                     </InformationCardContent>
                 </span>
 
-                <span className={'button-card-span-parent' + ' ' + isInvisible}>
+                <span className={'button-card-span-parent ' + (this.isHovering? "invisible" : "")}>
                          <span onClick={this.onClickBookmark} className="button-card-span-left">
                             <ButtonCard buttonType={ButtonCardType.Bookmark}/>
                          </span>

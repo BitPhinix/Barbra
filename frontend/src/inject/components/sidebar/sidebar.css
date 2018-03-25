@@ -1,5 +1,6 @@
 #injected-app > #injected-sidebar {
     width: 380px !important;
+    max-width: 380px !important;
     height: 100vh !important;
     position: fixed;
     right: 0 !important;
