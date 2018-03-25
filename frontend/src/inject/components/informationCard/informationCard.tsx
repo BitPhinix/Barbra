@@ -13,6 +13,7 @@ interface InformationCardProps {
     source: string;
     title: string;
     description: string;
+    sourceUrl: string;
 }
 
 @observer
@@ -28,6 +29,9 @@ export class InformationCard extends React.Component<InformationCardProps, any> 
 
     @action('handle onClick')
     onClickExpand = () => {
+        if (this.stringMaxLength === 700) {
+            window.open(this.props.sourceUrl, "_blank");
+        }
         this.stringMaxLength = 700;
     };
 
@@ -62,7 +66,7 @@ export class InformationCard extends React.Component<InformationCardProps, any> 
                 <span onClick={this.onClickExpand}>
                     <InformationCardHeader theme={this.props.theme} source={this.props.source}/>
                     <InformationCardContent>
-                        <h5>
+                        <h5 onClick={() => window.open(this.props.sourceUrl, "_blank")}>
                             {this.props.title}
                         </h5>
                         <p>
