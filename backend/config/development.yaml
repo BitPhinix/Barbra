@@ -1,7 +1,10 @@
 server:
-  host: "http://localhost"
+  host: "https://b6bce9e2.ngrok.io"
   port: ":8080"
   cookie_secret: "rUmxNwiR5tpQ3I92a72UoC9A0rJ0qs1QKgqmMEaO"
+
+nlp:
+  script_location: "../nlp/Recommender.py"
 
 db:
   address: ":27017"
@@ -11,8 +14,8 @@ db:
 
 oauth:
   google:
-    client_id: "590936575046-qsm6u1ukjmip3l7bgi2hknijkkqu2rj8.apps.googleusercontent.com"
-    client_secret: "PG-4cXidPjOr9yDKIHshbaOV"
+    client_id: "548111961383-0uk4rq75r4eqj84n2vu24hkd0pisvkeu.apps.googleusercontent.com"
+    client_secret: "0fnTYzq4cXb5pyKP0-BVAHMr"
   facebook:
     client_id: "232026520698280"
     client_secret: "cb34a278eafebd9285e92a2893a71c67"

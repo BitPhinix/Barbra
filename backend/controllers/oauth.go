@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"github.com/gin-contrib/sessions"
 	"fmt"
+	"time"
 )
 
 type OAuth struct {
@@ -28,7 +29,14 @@ func (oAuth *OAuth) Login(c *gin.Context) {
 	provider := oAuth.GetProvider(providerId)
 
 	if provider == nil {
-		respondError(c, http.StatusBadRequest, "Invalid oauth provider!")
+		RespondError(c, http.StatusBadRequest, "Invalid oauth provider!")
+		return
+	}
+
+	extensionId := fmt.Sprint(c.Query("ext_id"))
+
+	if len(extensionId) != 32 {
+		RespondError(c, http.StatusBadRequest, "Invalid ext_id!")
 		return
 	}
 
@@ -37,6 +45,8 @@ func (oAuth *OAuth) Login(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Set("state", state)
 	session.Set("provider", providerId)
+	session.Set("expires", time.Now().Unix()+30*24*60*60*1000)
+	session.Set("ext_id", extensionId)
 	session.Save()
 
 	c.JSON(http.StatusOK, map[string]string{"url": provider.GetLoginUrl(state)})
@@ -44,31 +54,46 @@ func (oAuth *OAuth) Login(c *gin.Context) {
 
 func (oAuth *OAuth) Auth(c *gin.Context) {
 	session := sessions.Default(c)
+	extensionId := fmt.Sprint(session.Get("ext_id"))
 
 	if session.Get("state") != c.Query("state") || session.Get("state") == nil {
-		respondError(c, http.StatusUnauthorized, "Invalid session state!")
+		SendPluginError(c, extensionId, "Invalid session (-state)!")
+		CloseWindow(c)
 		return
 	}
 
 	provider := oAuth.GetProvider(fmt.Sprint(session.Get("provider")))
 
 	if provider == nil {
-		respondError(c, http.StatusBadRequest, "Invalid oauth provider!")
+		SendPluginError(c, extensionId, "Invalid oauth provider!")
+		CloseWindow(c)
 		return
 	}
 
 	token, err := provider.ExchangeToken(fmt.Sprint(c.Query("code")))
 
 	if err != nil {
-		respondError(c, http.StatusUnauthorized, "Unable to exchange token!")
+		SendPluginError(c, extensionId, err.Error())
+		CloseWindow(c)
 		return
 	}
 
 	client := provider.GetClient(token)
-	c.JSON(http.StatusOK, provider.GetUserAccount(client))
+	user, err := provider.GetUserAccount(client)
+
+	if err != nil {
+		SendPluginError(c, extensionId, err.Error())
+		CloseWindow(c)
+		return
+	}
+
+	session.Set("user_id", user.Email)
+	session.Save()
+
+	SendPluginCookie(c, extensionId)
+	CloseWindow(c)
 }
 
-//window.parent.postMessage(obj);
 func (oAuth *OAuth) GetProvider(id string) (*utils.OAuthProvider) {
 	if id == utils.Google {
 		return oAuth.googleProvider
