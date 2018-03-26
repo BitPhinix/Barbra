@@ -1,4 +1,4 @@
-By ..., Tornike Tsereteli, ...
+By ..., Tornike Tsereteli, Eric Meier
 
 # Barbara
 
