@@ -1,4 +1,5 @@
-By Gabriel Birnbaum, Tammo Ronke, Tornike Tsereteli, Eric Meier
+Project submitted to the OpenCodes Hackathon 2018.
+By Gabriel Birnbaum, Tammo Ronke, Eric Meier, Tornike Tsereteli
 
 # Barbra
 
