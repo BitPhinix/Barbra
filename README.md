@@ -1,4 +1,4 @@
-By ...Tammo Ronke, Tornike Tsereteli, Eric Meier
+By Gabriel Birnbaum, Tammo Ronke, Tornike Tsereteli, Eric Meier
 
 # Barbra
 
