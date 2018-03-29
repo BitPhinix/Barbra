@@ -1,0 +1,30 @@
+{
+  "manifest_version": 2,
+  "name": "Barbra",
+  "description": "Learn how to learn!",
+  "version": "0.1.0",
+  "permissions": [
+    "background",
+    "activeTab",
+    "storage",
+    "tabs"
+  ],
+  "background": {
+    "scripts": [
+      "js/background.js"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": ["js/app.js"
+      ]
+    }
+  ],
+  "web_accessible_resources": [
+    "*"
+  ]
+}
