@@ -7,7 +7,9 @@
     "background",
     "activeTab",
     "storage",
-    "tabs"
+    "tabs",
+    "http://*/*",
+    "https://*/*"
   ],
   "background": {
     "scripts": [
@@ -20,8 +22,7 @@
         "http://*/*",
         "https://*/*"
       ],
-      "js": ["js/app.js"
-      ]
+      "js": ["js/inject.js"]
     }
   ],
   "web_accessible_resources": [

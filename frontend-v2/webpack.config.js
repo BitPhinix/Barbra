@@ -3,14 +3,14 @@ const path = require("path");
 
 module.exports = {
     entry: {
-        "page/js/app": "./src/page/app/app.tsx",
+        content: "./src/page/app/app.tsx",
 
-        "extension/js/app": "./src/extension/app/app.tsx",
-        "extension/js/background": "./src/extension/background.ts"
+        inject: "./src/extension/app/app.tsx",
+        background: "./src/extension/background.ts"
     },
 
     output: {
-        filename: "[name].js",
+        filename: "js/[name].js",
         path: path.resolve(__dirname, "dist")
     },
 
