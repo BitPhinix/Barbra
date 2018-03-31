@@ -2,19 +2,24 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const path = require("path");
 
 module.exports = {
-    entry: {
-        content: "./src/page/app/app.tsx",
 
-        inject: "./src/extension/app/app.tsx",
-        background: "./src/extension/background.ts"
+    stats: {
+        // Configure the console output
+        errorDetails: true, //this does show errors
+        colors: true,
+        modules: true,
+        reasons: true
+    },
+    
+    entry: {
+        "extension/js/extension": "./src/extension/app/app.tsx",
+        "resources/sidebar": "./src/sidebar/app/app.tsx"
     },
 
     output: {
-        filename: "js/[name].js",
+        filename: "[name].js",
         path: path.resolve(__dirname, "dist")
     },
-
-    devtool: "source-map",
 
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".jsx", ".json", ".css"],

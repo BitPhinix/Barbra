@@ -1,35 +1,37 @@
-import "./app.css";
 import * as React from "react";
 import { render } from "react-dom";
+import * as Brow from "../../utils/Browserium";
 
 interface Props {}
+
 interface States {}
 
 class App extends React.Component<Props, States> {
-	private selector: string;
+
+	private iframeCss: React.CSSProperties = {
+		zIndex: 10000000,
+		position: "fixed",
+		top: "0",
+		right: "0",
+		border: "none",
+		background: "white",
+		height: "100vh",
+		width: "330px"
+	};
 
 	render() {
-		if ((navigator.userAgent.indexOf("Opera") || navigator.userAgent.indexOf("OPR")) != -1) {
-		} else if (navigator.userAgent.indexOf("Chrome") != -1) {
-			this.selector = "chrome-extension://" + chrome.runtime.id;
-		} else if (navigator.userAgent.indexOf("Safari") != -1) {
-		} else if (navigator.userAgent.indexOf("Firefox") != -1) {
-		} else if (navigator.userAgent.indexOf("MSIE") != -1 || !!document.documentMode == true) {
-		}
-		return <iframe id={"injected-iframe"} src={this.selector + "/content.html"} />;
+		return (
+			<div id={"injected-react-app"}>
+				<iframe
+					src={Brow.environment().runtime.getURL("/sidebar.html")}
+					style={this.iframeCss}
+				/>
+			</div>
+		);
 	}
 }
-
-const base = document.createElement("div");
-base.id = "react-base";
+let base: HTMLDivElement = document.createElement("div");
+base.id = "injected-react-base";
 document.body.appendChild(base);
 
 render(<App />, base);
-
-declare var safari: { pushNotification };
-declare var opr: { addons };
-declare var document: document;
-
-interface document extends Document {
-	documentMode;
-}

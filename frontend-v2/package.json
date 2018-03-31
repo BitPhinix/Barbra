@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Just a Chrome extension.",
   "scripts": {
-    "start": "xdg-open http://localhost:9000/webpack-dev-server/content.html & webpack-dev-server --hot",
     "https": "webpack-dev-server --hot --port 9090 --https",
     "build": "webpack",
     "serve": "webpack -w"
