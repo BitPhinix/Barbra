@@ -1,4 +1,8 @@
-# Barbara
+Project submitted to the OpenCodes Hackathon 2018.
+
+By Gabriel Birnbaum, Eric Meier, Tammo Ronke, Tornike Tsereteli
+
+# Barbra
 
 ## Inspiration
 Much of what we do at work and at school today is not learning itself, but rather searching for what we need to learn. Barbra will automate that process. We want to make learning more approachable so people can learn faster and each can enjoy its pleasure without the stress and barriers of not knowing where to go next.
