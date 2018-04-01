@@ -6,7 +6,7 @@ import {observer} from 'mobx-react';
 import {ThemesList} from "./themesList/themesList";
 import { Greeting } from './greeting/greeting';
 import BookmarksInformationCardContainer from "./bookmarksInformationCardContainer/bookmarksInformationCardContainer";
-import B from "../"
+import * as BackDispatcher from "../inject/backDispatcher"
 
 @observer
 class Bookmarks extends React.Component {
@@ -17,6 +17,8 @@ class Bookmarks extends React.Component {
     constructor(props) {
         super(props);
         this.bookmarksInformationCardContainer.filterContentBookmarks('Json',);
+
+        BackDispatcher.addListener("return_bookmarks", message:  => );
     }
 
     render() {

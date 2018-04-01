@@ -1,5 +1,3 @@
-import * as React from "react";
-
 export const sendMessage = (type: string, message?: any) => {
     chrome.runtime.sendMessage(chrome.runtime.id, {
         type: type,
