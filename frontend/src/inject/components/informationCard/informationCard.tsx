@@ -38,7 +38,7 @@ export default class InformationCard extends React.Component<InformationCardProp
 
     @action('bookmark card')
     onClickBookmark = () => {
-        // STORE
+        // THIS.PROPS.STORE.USER.BOOKMARKS.PUSH(e);
     };
 
     @action('delete card')
@@ -68,15 +68,15 @@ export default class InformationCard extends React.Component<InformationCardProp
                     </InformationCardContent>
                 </span>
 
-                <span className={'button-card-span-parent ' + (this.isHovering? "invisible" : "")}>
-                         <span onClick={this.onClickBookmark} className="button-card-span-left">
-                            <ButtonCard buttonType={ButtonCardType.Bookmark}/>
-                         </span>
+                <span className={'button-card-span-parent ' + (this.isHovering ? "invisible" : "")}>
+                     <span onClick={this.onClickBookmark} className="button-card-span-left">
+                        <ButtonCard buttonType={ButtonCardType.Bookmark}/>
+                     </span>
 
-                        <span onClick={this.onClickDelete} className="button-card-span-right">
-                            <ButtonCard buttonType={ButtonCardType.Delete}/>
-                        </span>
+                    <span onClick={this.onClickDelete} className="button-card-span-right">
+                        <ButtonCard buttonType={ButtonCardType.Delete}/>
                     </span>
+                </span>
             </div>
         );
     }

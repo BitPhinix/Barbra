@@ -3,20 +3,18 @@ import { divWithClass } from '../../inject/helpers/divWithClass';
 import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import './themesList.css';
+import { SidebarStore } from '../../inject/stores/sidebar';
 
 const ThemesListHeader = divWithClass('themes-list-header');
 const ThemesListContent = divWithClass('themes-list-content');
 
-interface ThemesListProps {
-    themes: string[];
-}
-
 @observer
-export class ThemesList extends React.Component<ThemesListProps, any> {
+export class ThemesList extends React.Component<{
+    themes: string[],
+    store: SidebarStore
+}, {}> {
 
     @observable activeIndex: number;
-    @observable isSelected: boolean;
-    @observable selectedTheme: string;
 
     constructor(props) {
         super(props);
@@ -25,8 +23,8 @@ export class ThemesList extends React.Component<ThemesListProps, any> {
     @action('select item')
     selectItem = (index: number) => {
         this.activeIndex = index;
-        this.selectedTheme = this.props.themes[index];
-        this.isSelected = true;
+        this.props.store.themesListSelectedTheme = this.props.themes[index];
+        this.props.store.isThemesListSelected = true;
     };
 
 
