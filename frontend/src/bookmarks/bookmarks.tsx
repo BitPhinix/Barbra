@@ -12,7 +12,7 @@ import { action } from 'mobx';
 import {UserStore} from "../inject/stores/user";
 
 @observer
-class Bookmarks extends React.Component< {store: SidebarStore, user: UserStore}, {}> {
+class Bookmarks extends React.Component<{ store: SidebarStore, user: UserStore }, {}> {
 
     private greeting: Greeting = new Greeting("Test");
     private bookmarksInformationCardContainer: BookmarksInformationCardContainer = new BookmarksInformationCardContainer(this.props.user.userBookmarks);
