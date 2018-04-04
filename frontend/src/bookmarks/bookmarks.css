@@ -17,4 +17,6 @@ body {
     background: green;
 }
 
-
+.invisible {
+    visibility: hidden;
+}

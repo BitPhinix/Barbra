@@ -6,17 +6,28 @@ import {observer} from 'mobx-react';
 import {ThemesList} from "./themesList/themesList";
 import { Greeting } from './greeting/greeting';
 import BookmarksInformationCardContainer from "./bookmarksInformationCardContainer/bookmarksInformationCardContainer";
-import B from "../"
+import * as BackDispatcher from '../inject/backDispatcher';
+import { SidebarStore } from '../inject/stores/sidebar';
+import { action } from 'mobx';
+import {UserStore} from "../inject/stores/user";
 
 @observer
-class Bookmarks extends React.Component {
+class Bookmarks extends React.Component<{ store: SidebarStore, user: UserStore }, {}> {
 
     private greeting: Greeting = new Greeting("Test");
-    private bookmarksInformationCardContainer: BookmarksInformationCardContainer = new BookmarksInformationCardContainer();
+    private bookmarksInformationCardContainer: BookmarksInformationCardContainer = new BookmarksInformationCardContainer(this.props.user.userBookmarks);
 
     constructor(props) {
         super(props);
-        this.bookmarksInformationCardContainer.filterContentBookmarks('Json',);
+        // BackDispatcher.addListener("return_bookmarks", message:  => );
+    }
+
+    @action('update onChange')
+    onThemesListChangeUpdate = () => {
+        if (this.props.store.isThemesListSelected) {
+            this.greeting.setTheme(this.props.store.themesListSelectedTheme);
+            this.bookmarksInformationCardContainer.filterContentBookmarks(this.props.store.themesListSelectedTheme, this.props.user.userBookmarks); //TODO
+        }
     }
 
     render() {
@@ -25,10 +36,10 @@ class Bookmarks extends React.Component {
                 <div id={"bookmark-header"}>{this.greeting.render()}</div>
                 <div id={"bookmark-container"}>
                     <div className="row">
-                        <div className="col-md-4">
-                            <ThemesList themes={['tammo', 'eric', 'gavri', 'tony']}/>
+                        <div className="col-md-4" onChange={this.onThemesListChangeUpdate}>
+                            <ThemesList themes={this.props.user.userThemes} store={this.props.store}/>
                         </div>
-                        <div className="col-md-8">
+                        <div className={"col-md-8" + this.props.store.isThemesListSelected ? '' : 'invisible'} >
                             {this.bookmarksInformationCardContainer.render()}
                         </div>
                     </div>
@@ -38,4 +49,7 @@ class Bookmarks extends React.Component {
     }
 }
 
-render(<Bookmarks/>, document.getElementById("react-base"));
+let store: SidebarStore = new SidebarStore();
+let userStore: UserStore = new UserStore();
+
+render(<Bookmarks store={store} user={userStore}/>, document.getElementById("react-base"));

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {InformationCard} from "../../inject/components/informationCard/informationCard";
+import InformationCard from "../../inject/components/informationCard/informationCard";
 
 export default class BookmarksInformationCardContainer extends React.Component<{}, {
     contentCards: JSX.Element[]
