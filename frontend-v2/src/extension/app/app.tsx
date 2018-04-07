@@ -1,12 +1,9 @@
 import * as React from "react";
 import { render } from "react-dom";
-import * as Brow from "../../utils/Browserium";
+import * as Browserium from "../../utils/Browserium";
 
-interface Props {}
+class App extends React.Component {
 
-interface States {}
-
-class App extends React.Component<Props, States> {
 
 	private iframeCss: React.CSSProperties = {
 		zIndex: 10000000,
@@ -16,14 +13,14 @@ class App extends React.Component<Props, States> {
 		border: "none",
 		background: "white",
 		height: "100vh",
-		width: "330px"
+		width: "360px"
 	};
 
 	render() {
 		return (
 			<div id={"injected-react-app"}>
 				<iframe
-					src={Brow.environment().runtime.getURL("/sidebar.html")}
+					src={Browserium.environment().runtime.getURL("/sidebar.html")}
 					style={this.iframeCss}
 				/>
 			</div>

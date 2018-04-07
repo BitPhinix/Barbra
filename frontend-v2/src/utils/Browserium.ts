@@ -7,7 +7,7 @@ export class Frontceiver {
 
 	public sendToBackground = (type: string, data?: any) => {
 		//sending message to backceiver
-		environment().runtime.sendMessage(chrome.runtime.id, {
+		environment().runtime.sendMessage(environment().runtime.id, {
 			sender: this.id,
 			type: type,
 			data: data

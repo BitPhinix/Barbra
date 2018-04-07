@@ -1,8 +1,8 @@
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+var FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const path = require("path");
 
 module.exports = {
-
     stats: {
         // Configure the console output
         errorDetails: true, //this does show errors
@@ -13,7 +13,9 @@ module.exports = {
     
     entry: {
         "extension/js/extension": "./src/extension/app/app.tsx",
+        "extension/js/background": "./src/extension/background/background.ts",
         "resources/sidebar": "./src/sidebar/app/app.tsx"
+        
     },
 
     output: {
@@ -22,7 +24,7 @@ module.exports = {
     },
 
     resolve: {
-        extensions: [".ts", ".tsx", ".js", ".jsx", ".json", ".css"],
+        extensions: [".ts", ".tsx", ".js", ".jsx", ".json", ".scss"],
     },
 
     module: {
@@ -32,10 +34,11 @@ module.exports = {
                 loader: "awesome-typescript-loader"
             },
             {
-                test: /\.css$/,
+                test: /\.scss$/,
                 use: [
                     { loader: "style-loader" },
-                    { loader: "css-loader" }
+                    { loader: "css-loader" },
+                    { loader: "sass-loader" }
                 ]
             },
             {
@@ -52,13 +55,15 @@ module.exports = {
                 from: "./src/static/",
                 to: "./"
             }
-        ])
+        ]),
+        new FriendlyErrorsWebpackPlugin(),
     ],
 
     devServer: {
         contentBase: path.resolve(__dirname, "dist"),
         inline: true,
         hot: true,
-        port: 9000
+        port: 9000,
+        quiet: true,
     }
 };
