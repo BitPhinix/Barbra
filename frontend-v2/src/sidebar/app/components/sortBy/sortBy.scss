@@ -22,7 +22,34 @@
         cursor: pointer;
         user-select: none;
 
+        display: grid;
+        grid-template-columns: 1fr 18px;
+        grid-template-rows: min-content 1.7px;
+        grid-template-areas: 
+            "selected arrow"
+            "border border";
+
+        .sortBy-con-selector-selected{
+            grid-area: selected;
+        }
+
+        .sortBy-con-selector-arrow{
+            margin-left: 4px;
+            grid-area: arrow;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            svg{
+                height: 10px;
+                width: 10px;
+            }
+        }
+
         .sortBy-con-selector-border{
+            grid-area: border;
+
             height: 1.5px;
             width: calc(100% + 5px);
 
@@ -35,7 +62,7 @@
         }
 
         &:hover .sortBy-con-selector-border{
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
     }
 }
@@ -55,6 +82,7 @@
     &.hidden{
         opacity: 0;
         visibility: collapse;
+        z-index: -100;
     }
 
     ul{
@@ -64,7 +92,7 @@
 
         li{
             height: 30px;
-            padding: 2px 15px 2px 15px;
+            padding: 2px 20px 2px 20px;
 
             cursor: pointer;
             
