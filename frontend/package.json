@@ -18,7 +18,7 @@
     "react-dom": "16.6.3"
   },
   "devDependencies": {
-    "@types/chrome": "0.0.60",
+    "@types/chrome": "0.0.75",
     "awesome-typescript-loader": "3.5.0",
     "copy-webpack-plugin": "4.6.0",
     "css-loader": "0.28.11",
